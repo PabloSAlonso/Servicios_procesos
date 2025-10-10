@@ -1,13 +1,13 @@
 ﻿namespace BoletinT4_Servidores
 {
-    internal class Ejercicio1
+    internal class Ejercicio1_1
     {
 
-        public static void funcionLs(string argsMain)
+        public static void funcionLs(string[] args)
         {
-            if (argsMain.Length > 0 && Directory.Exists(argsMain))
+            if (args.Length > 0 && Directory.Exists(args))
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(argsMain);
+                DirectoryInfo directoryInfo = new DirectoryInfo(args);
                 Console.WriteLine("Directorios");
                 Console.ForegroundColor = ConsoleColor.Red;
                 foreach (var directorios in directoryInfo.GetDirectories())
