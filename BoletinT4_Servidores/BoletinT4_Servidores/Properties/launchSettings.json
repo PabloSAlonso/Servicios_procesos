@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BoletinT4_Servidores": {
+      "commandName": "Project",
+      "commandLineArgs": "-n120 \"C:\\Users\\Pablo Santana\\Desktop\\Interfaces-Servidores\\DesarrolloServidores\\BoletinT4_Servidores\\BoletinT4_Servidores\\pablo.txt\""
+    }
+  }
+}
