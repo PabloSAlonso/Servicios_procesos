@@ -11,7 +11,7 @@ namespace BoletinT4_Servidores
         public static void Main(string[] args)
         {
             //Ejercicio1.funcionLs(args[0]);
-            Ejercicio2.funcionCat( args);
+            Ejercicio2.funcionCat(args);
         }
     }
 }
