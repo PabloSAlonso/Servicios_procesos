@@ -8,44 +8,54 @@ using System.IO;
 
 namespace BoletinT4_Servidores
 {
-    public class Ejercicio2
+    public class Ejercicio1_2
     {
 
-        public static void funcionCat(string[] args)
+        public static void FuncionCat(string[] args)
         {
-            StreamReader sr;
+            //StreamReader sr;
             string[] modificador;
-            int modNumero = 0;
+            int numFilas = 0;
             try
             {
-                if (args.Length <= 2 && args.Length > 0)
+                if (args.Length == 1) //No hay modificador
                 {
-                    if (args.Length == 1) //No hay modificador
+                    using (StreamReader sr = new StreamReader(args[0]))
                     {
-                        sr = new StreamReader(args[0]);
                         Console.WriteLine(sr.ReadToEnd());
-                        sr.Close();
-                    }
-                    else //Hay modificador
-                    {
-                        sr = new StreamReader(args[1]);
-                        modificador = args[0].Split("-n");
-                        modNumero = int.Parse(modificador[1]);
-                        for (int i = modNumero; i > 0; i--) //Ver si ya acabo de leerse el archivo y el usuario pidio lineas de mas
-                        {
-                            string linea = sr.ReadLine();
-                            if (linea != null)
-                            {
-                                Console.WriteLine(linea);
-                            }
-                            
-                        }
                     }
                 }
+                else if (args.Length == 2)//Hay modificador
+                {
+                    using (StreamReader sr = new StreamReader(args[1]))
+                    {
+                        string mod = args[0];
+                        if (mod.StartsWith("-n"))
+                        {
+                            modificador = args[0].Split("-n");
+                            numFilas = int.Parse(modificador[1]);
+                            for (int i = numFilas; i > 0; i--)
+                            {
+                                string linea = sr.ReadLine();
+                                if (linea != null)
+                                {
+                                    Console.WriteLine(linea);
+                                }
 
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Junto al modifcador -n debe ir un entero");
+                        }
+
+
+                    }
+
+                }
                 else
                 {
-                    Console.WriteLine("El formato es incorrecto");
+                    Console.WriteLine("Formato: cat -nN ruta");
                 }
             }
             catch (FileNotFoundException)

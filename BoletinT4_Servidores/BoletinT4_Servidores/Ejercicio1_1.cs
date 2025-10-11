@@ -3,11 +3,11 @@
     internal class Ejercicio1_1
     {
 
-        public static void funcionLs(string[] args)
+        public static void FuncionLs(string[] args)
         {
-            if (args.Length > 0 && Directory.Exists(args))
+            if (args.Length > 0 && Directory.Exists(args[0]))
             {
-                DirectoryInfo directoryInfo = new DirectoryInfo(args);
+                DirectoryInfo directoryInfo = new DirectoryInfo(args[0]);
                 Console.WriteLine("Directorios");
                 Console.ForegroundColor = ConsoleColor.Red;
                 foreach (var directorios in directoryInfo.GetDirectories())
