@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace BoletinT4_Servidores
 {
-    internal class Class1
+    internal class Ejercicio1_2
     {
+
     }
 }
