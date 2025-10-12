@@ -10,9 +10,9 @@ namespace BoletinT4_Servidores
     {
         public static void Main(string[] args)
         {
-            Ejercicio1_1.FuncionLs(args);
-            Ejercicio1_2.FuncionCat(args);
-
+            //Ejercicio1_1.FuncionLs(args);
+            //Ejercicio1_2.FuncionCat(args);
+            Ejercicio1_3.FuncionNewFile(args);
         }
     }
 }

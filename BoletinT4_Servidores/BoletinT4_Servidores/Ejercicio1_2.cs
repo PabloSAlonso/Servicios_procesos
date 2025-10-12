@@ -16,6 +16,7 @@ namespace BoletinT4_Servidores
             //StreamReader sr;
             string[] modificador;
             int numFilas = 0;
+            string linea = "";
             try
             {
                 if (args.Length == 1) //No hay modificador
@@ -33,27 +34,27 @@ namespace BoletinT4_Servidores
                         if (mod.StartsWith("-n"))
                         {
                             modificador = args[0].Split("-n");
-                            numFilas = int.Parse(modificador[1]);
-                            for (int i = numFilas; i > 0; i--)
-                            {
-                                string linea = sr.ReadLine();
-                                if (linea != null)
+                            if (int.TryParse(modificador[1], out numFilas))
+                                for (int i = 0; i < numFilas; i++)
                                 {
-                                    Console.WriteLine(linea);
-                                }
+                                    linea = sr.ReadLine();
+                                    if (linea != null)
+                                    {
+                                        Console.WriteLine(linea);
+                                    }
 
-                            }
+                                }
                         }
                         else
                         {
-                            Console.WriteLine("Junto al modifcador -n debe ir un entero");
+                            Console.WriteLine("El modificador disponible es -n y debe ir un entero pegado a él");
                         }
 
 
                     }
 
                 }
-                else
+                else //Está vacío o hay lineas de mas
                 {
                     Console.WriteLine("Formato: cat -nN ruta");
                 }

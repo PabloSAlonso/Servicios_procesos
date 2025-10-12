@@ -1,6 +1,6 @@
 ﻿namespace BoletinT4_Servidores
 {
-    internal class Ejercicio1_1
+    public class Ejercicio1_1
     {
 
         public static void FuncionLs(string[] args)
