@@ -15,15 +15,17 @@ namespace BoletinT4_Servidores
             if (args.Length == 2) //No modificador -a
             {
                 Console.WriteLine("Entró");
-                StreamWriter streamWriter = new StreamWriter(args[0]);
+                using (StreamWriter streamWriter = new StreamWriter(args[0])){;
                 streamWriter.WriteLine(args[1]);
+                }
             }
             else if (args.Length == 3) //Modificador -a
             {
                 if (args[1].StartsWith("-a") && args[1].Split("-a").Length == 1)
                 {
-                    StreamWriter streamWriter2 = new StreamWriter(args[0], true);
+                    using (StreamWriter streamWriter2 = new StreamWriter(args[0], true)){;
                     streamWriter2.WriteLine(args[2]);
+                    }
                 }
             }
             else
