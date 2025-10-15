@@ -12,30 +12,39 @@ namespace BoletinT4_Servidores
     {
         public static void FuncionNewFile(string[] args)
         {
-            if (args.Length == 2) //No modificador -a
+            try
             {
-                Console.WriteLine("Entró sin modificador");
-                using (StreamWriter streamWriter = new StreamWriter(args[0]))
+                if (args.Length == 2) //No modificador -a
                 {
-                    streamWriter.WriteLine(args[1]);
-                }
-            }
-            else if (args.Length == 3) //Modificador -a
-            {
-                Console.WriteLine("Entró con modificador");
-                if (args[1] == "-a") 
-                {
-                    using (StreamWriter streamWriter2 = new StreamWriter(args[0], true))
+                    Console.WriteLine("Entró sin modificador");
+                    using (StreamWriter streamWriter = new StreamWriter(args[0]))
                     {
-                        streamWriter2.WriteLine(args[2]);
+                        streamWriter.WriteLine(args[1]);
                     }
                 }
+                else if (args.Length == 3) //Modificador -a
+                {
+                    Console.WriteLine("Entró con modificador");
+                    if (args[0] == "-a")
+                    {
+                        using (StreamWriter streamWriter2 = new StreamWriter(args[1], true))
+                        {
+                            streamWriter2.WriteLine(args[2]);
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Formato: archivo.txt \"Texto a escribir en archivo.txt\"");
+                    Console.WriteLine("Modificadores disponibles: -a (Añade el texto al archivo seleccionado sin sobreescribir lo anterior escrito en él)");
+                }
             }
-            else
+            catch (IOException)
             {
-                Console.WriteLine("Formato: archivo.txt \"Texto a escribir en archivo.txt\"");
-                Console.WriteLine("Modificadores disponibles: -a (Añade el texto al archivo seleccionado sin sobreescribir lo anterior escrito en él)");
+                Console.WriteLine("Archivo corrupto o inexistente");
             }
+
+
         }
     }
 }

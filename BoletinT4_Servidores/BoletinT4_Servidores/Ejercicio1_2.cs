@@ -35,13 +35,10 @@ namespace BoletinT4_Servidores
                         {
                             modificador = args[0].Split("-n");
                             if (int.TryParse(modificador[1], out numFilas))
-                                for (int i = 0; i < numFilas; i++)
+                                for (int i = 0; i < numFilas && linea != null; i++)
                                 {
                                     linea = sr.ReadLine();
-                                    if (linea != null)
-                                    {
-                                        Console.WriteLine(linea);
-                                    }
+                                    Console.WriteLine(linea);
                                 }
                         }
                         else
@@ -56,7 +53,7 @@ namespace BoletinT4_Servidores
                     Console.WriteLine("Formato: cat -nN ruta");
                 }
             }
-            catch (FileNotFoundException)
+            catch (IOException)
             {
                 Console.WriteLine("Archivo inexistente o corrupto");
             }
