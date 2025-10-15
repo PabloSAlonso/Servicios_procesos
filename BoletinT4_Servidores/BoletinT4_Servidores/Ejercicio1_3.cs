@@ -23,7 +23,7 @@ namespace BoletinT4_Servidores
             else if (args.Length == 3) //Modificador -a
             {
                 Console.WriteLine("Entró con modificador");
-                if (args[1].StartsWith("-a") && args[1].Split("-a").Length == 1)
+                if (args[1] == "-a") 
                 {
                     using (StreamWriter streamWriter2 = new StreamWriter(args[0], true))
                     {
