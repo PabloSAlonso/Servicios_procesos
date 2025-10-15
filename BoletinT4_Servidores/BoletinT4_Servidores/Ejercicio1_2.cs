@@ -42,15 +42,12 @@ namespace BoletinT4_Servidores
                                     {
                                         Console.WriteLine(linea);
                                     }
-
                                 }
                         }
                         else
                         {
                             Console.WriteLine("El modificador disponible es -n y debe ir un entero pegado a él");
                         }
-
-
                     }
 
                 }

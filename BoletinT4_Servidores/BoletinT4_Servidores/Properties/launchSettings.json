@@ -2,7 +2,7 @@
   "profiles": {
     "BoletinT4_Servidores": {
       "commandName": "Project",
-      "commandLineArgs": "\"C:\\Users\\Pablo Santana\\source\\repos\\PabloSAlonso\\Servidores\\BoletinT4_Servidores\\BoletinT4_Servidores\\pablo.txt\" -a \"Holaa que taaal\""
+      "commandLineArgs": "\"C:\\Users\\Pablo Santana\\source\\repos\\PabloSAlonso\\Servidores\\BoletinT4_Servidores\\BoletinT4_Servidores\\pablo.txt\" \"Holaa que taaal\""
     }
   }
 }
