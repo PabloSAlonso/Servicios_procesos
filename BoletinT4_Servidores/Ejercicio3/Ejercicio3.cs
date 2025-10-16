@@ -4,8 +4,9 @@
     {
         public delegate double Peticion(double x);
 
-        public static double pedirDouble(double x)
+        public static double pedirDouble()
         {
+            double x;
             Console.WriteLine("Dame un numero decimal");
             if (double.TryParse(Console.ReadLine(), out x))
             {
@@ -13,21 +14,28 @@
             }
             return 0.0;
         }
-        public static double pedirExp(double exp)
-        {
-            Console.WriteLine("Dame tu exponente 2 o 3");
-            if (double.TryParse(Console.ReadLine(), out exp) && exp == 2 || exp == 3)
-            {
-                Console.WriteLine("Exponente recogido correctamente");
-                return exp;
-            }
-            return 0.0;
-        }
+
         public static void Main(string[] args)
         {
-            Peticion p = new (pedirDouble);
-            Peticion e = new (pedirExp);
-            Console.WriteLine($"Cuadrado de tu num es:{e}");
+            double num = pedirDouble();
+            int exp = 0;
+            Peticion e = p => p;
+            while (exp != 2 && exp != 3)
+            {
+                Console.WriteLine("Dame un 2 para cuadrado o 3 para cubo");
+                exp = int.Parse(Console.ReadLine());
+                if (exp == 2)
+                {
+                    e = (num) => num * num;
+                }
+                else if (exp == 3)
+                {
+                    e = (num) => num * num * num;
+                }
+                Console.WriteLine(e(num));
+
+            }
+
         }
     }
 }
