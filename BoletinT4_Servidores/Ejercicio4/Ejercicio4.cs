@@ -6,10 +6,6 @@ namespace Ejercicio4
 {
     public class Ejercicio4
     {
-        public static bool encontrarIndex(int n)
-        {
-            return n >= 5;
-        }
         static void Main(string[] args)
         {
             int[] notas = { 5, 2, 8, 1, 9, 4 };
@@ -18,35 +14,36 @@ namespace Ejercicio4
 #if ej1        
             if (Array.Exists(notas, num => num >= 5))
             {
-                Console.WriteLine("Hay aprobaos");
+                Console.WriteLine("Hay aprobados :)");
             }
 #elif ej2
             foreach (int nota in Array.FindAll(notas, num => num >= 5))
             {
-                Console.WriteLine(nota);
+                Console.WriteLine("Aprobados:{nota});
             }
 #elif ej3
-            Console.WriteLine(Array.FindIndex(notas, num => num >= 5));
+            int n = Array.FindLastIndex(notas, num => num >= 5); 
+            Console.WriteLine($"Posicion del ultimo aprobado {n+1}");
 
 #elif ej4
-
-
+            int n = Array.FindLast(notas, num =>  num >= 5);
+            Console.WriteLine($"Nota del ultimo aprobado {n}");
 
 #elif ej5
-
+            int pares = Array.FindAll(notas, num => num % 2 == 0).Length;
+            Console.WriteLine($"La cantidad de pares es {pares}");
 
 
 #elif ej6
+            string tresCaracteres = Array.Find(palabras, palabra => palabra.Length >= 3);
+            Console.WriteLine($"La primera palabra de 3 o mas caracteres es {tresCaracteres}");
 
 #elif ej7
+            Array.ForEach(palabras, palabra => palabra = palabra.ToUpper());
 
 #elif ej8
-
-#elif ej9
-
-#elif ej10
-
-#elif ej11
+            int indice = Array.FindIndex(palabras, palabra => palabra.StartsWith("E"));
+            Console.WriteLine($"Posicion palabra que empieza por E es:{indice+1}");
 
 #endif
         }
