@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using Ejercicio7_8;
+using Ejercicio7_8;
 
 namespace BoletinT4_Servicios
 {
     public class Ejercicio2
     {
-        //List<Astro> lista = Ejercicio7_8.Principal.colAstros;
-    
+        List<Astro> lista = Ejercicio7_8.Principal.colAstros;
+
     }
 }
 

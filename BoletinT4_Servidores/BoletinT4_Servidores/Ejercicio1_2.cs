@@ -37,7 +37,7 @@ namespace BoletinT4_Servidores
                             if (int.TryParse(modificador[1], out numFilas))
                                 for (int i = 0; i < numFilas && linea != null; i++)
                                 {
-                                    linea = sr.ReadLine();
+                                    linea = sr.ReadLine();  
                                     Console.WriteLine(linea);
                                 }
                         }
