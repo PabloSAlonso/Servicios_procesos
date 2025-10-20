@@ -11,6 +11,20 @@ namespace BoletinT4_Servicios
     public class Ejercicio2
     {
         List<Astro> lista = Ejercicio7_8.Principal.colAstros;
+        public static void cargarArchivo(List<Astro> lista)
+        {
+            using (StreamReader streamReader = new StreamReader(""))
+            {
+
+            }
+        }
+        public static void guardarArchivo(List<Astro> lista)
+        {
+            using (StreamWriter sw = new StreamWriter(""))
+            {
+
+            }
+        }
 
     }
 }

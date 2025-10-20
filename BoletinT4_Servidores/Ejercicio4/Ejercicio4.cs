@@ -1,4 +1,4 @@
-﻿#define ej3
+﻿#define ej1
 using Ejercicio4;
 using System.Reflection.Emit;
 
