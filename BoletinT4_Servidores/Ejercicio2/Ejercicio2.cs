@@ -4,28 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Ejercicio7_8;
 
 namespace BoletinT4_Servicios
 {
     public class Ejercicio2
     {
-        List<Astro> lista = Ejercicio7_8.Principal.colAstros;
-        public static void cargarArchivo(List<Astro> lista)
-        {
-            using (StreamReader streamReader = new StreamReader(""))
-            {
-
-            }
-        }
-        public static void guardarArchivo(List<Astro> lista)
-        {
-            using (StreamWriter sw = new StreamWriter(""))
-            {
-
-            }
-        }
-
+        
+        //Mirar ejercicio 7_8
     }
 }
 
