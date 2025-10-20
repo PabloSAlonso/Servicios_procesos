@@ -2,7 +2,7 @@
 {
     internal class Ejercicio4
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             int[] notas = { 5, 2, 8, 1, 9, 4 };
             string[] palabras = { "Sol", "Luna", "Estrella", "Cielo" };
