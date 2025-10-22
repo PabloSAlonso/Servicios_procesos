@@ -13,7 +13,8 @@
                 Console.WriteLine($"{i + 1}.- {opciones[i]}");
             }
             Console.WriteLine($"{opciones.Length + 1}.- Salir");
-            flag = int.TryParse("Dime tu opcion:", out opcion);
+            Console.WriteLine("Elige tu opción");
+            flag = int.TryParse(Console.ReadLine(), out opcion);
             do
             {
 
