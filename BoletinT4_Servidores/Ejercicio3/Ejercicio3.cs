@@ -40,7 +40,7 @@
                 }
                 else if (exp == 3)
                 {
-                    e = num => num * num * num;
+                    e = (num) => num * num * num;
                 }
                 Console.WriteLine(e(num));
 

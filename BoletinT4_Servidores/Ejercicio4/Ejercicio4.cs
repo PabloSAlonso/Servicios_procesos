@@ -1,4 +1,4 @@
-﻿#define ej1
+﻿#define ej7
 using Ejercicio4;
 using System.Reflection.Emit;
 
@@ -39,7 +39,7 @@ namespace Ejercicio4
             Console.WriteLine($"La primera palabra de 3 o mas caracteres es {tresCaracteres}");
 
 #elif ej7
-            Array.ForEach(palabras, palabra => palabra = palabra.ToUpper());
+            Array.ForEach(palabras, palabra => Console.WriteLine(palabra.ToUpper()));//TODO revisar
 
 #elif ej8
             int indice = Array.FindIndex(palabras, palabra => palabra.StartsWith("E"));
