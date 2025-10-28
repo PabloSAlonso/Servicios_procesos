@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿#define ej0
+=======
+﻿#define ej7
+>>>>>>> 64d7f3c05f1f7b7ec5aff988a6ba3a8a1430fdcb
 using Ejercicio4;
 using System.Reflection.Emit;
 
@@ -6,7 +10,7 @@ namespace Ejercicio4
 {
     public class Ejercicio4
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             int[] notas = { 5, 2, 8, 1, 9, 4 };
             string[] palabras = { "Sol", "Luna", "Estrella", "Cielo" };
@@ -39,7 +43,11 @@ namespace Ejercicio4
             Console.WriteLine($"La primera palabra de 3 o mas caracteres es {tresCaracteres}");
 
 #elif ej7
+<<<<<<< HEAD
             Array.ForEach(palabras, palabra => Console.WriteLine(palabra.ToUpper()));
+=======
+            Array.ForEach(palabras, palabra => Console.WriteLine(palabra.ToUpper()));//TODO revisar
+>>>>>>> 64d7f3c05f1f7b7ec5aff988a6ba3a8a1430fdcb
 
 #elif ej8
             int indice = Array.FindIndex(palabras, palabra => palabra.StartsWith("E"));
