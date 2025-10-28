@@ -1,4 +1,4 @@
-﻿#define ej3
+﻿#define ej0
 using Ejercicio4;
 using System.Reflection.Emit;
 
@@ -22,8 +22,8 @@ namespace Ejercicio4
                 Console.WriteLine("Aprobados:{nota});
             }
 #elif ej3
-            int n = Array.FindLastIndex(notas, num => num >= 5); 
-            Console.WriteLine($"Posicion del ultimo aprobado {n+1}");
+            int n = Array.FindLastIndex(notas, num => num >= 5);
+            Console.WriteLine($"Posicion del ultimo aprobado {n + 1}");
 
 #elif ej4
             int n = Array.FindLast(notas, num =>  num >= 5);
@@ -39,11 +39,11 @@ namespace Ejercicio4
             Console.WriteLine($"La primera palabra de 3 o mas caracteres es {tresCaracteres}");
 
 #elif ej7
-            Array.ForEach(palabras, palabra => palabra = palabra.ToUpper());
+            Array.ForEach(palabras, palabra => Console.WriteLine(palabra.ToUpper()));
 
 #elif ej8
             int indice = Array.FindIndex(palabras, palabra => palabra.StartsWith("E"));
-            Console.WriteLine($"Posicion palabra que empieza por E es:{indice+1}");
+            Console.WriteLine($"Posicion palabra que empieza por E es:{indice + 1}");
 
 #endif
         }
