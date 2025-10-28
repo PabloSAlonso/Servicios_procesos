@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-﻿#define ej0
-=======
-﻿#define ej7
->>>>>>> 64d7f3c05f1f7b7ec5aff988a6ba3a8a1430fdcb
+
 using Ejercicio4;
 using System.Reflection.Emit;
 
@@ -15,45 +11,43 @@ namespace Ejercicio4
             int[] notas = { 5, 2, 8, 1, 9, 4 };
             string[] palabras = { "Sol", "Luna", "Estrella", "Cielo" };
 
-#if ej1        
+//#if ej1        
             if (Array.Exists(notas, num => num >= 5))
             {
                 Console.WriteLine("Hay aprobados :)");
             }
-#elif ej2
+//#elif ej2
             foreach (int nota in Array.FindAll(notas, num => num >= 5))
             {
-                Console.WriteLine("Aprobados:{nota});
+                Console.WriteLine($"Aprobados:{nota}");
             }
-#elif ej3
+//#elif ej3
             int n = Array.FindLastIndex(notas, num => num >= 5);
             Console.WriteLine($"Posicion del ultimo aprobado {n + 1}");
 
-#elif ej4
-            int n = Array.FindLast(notas, num =>  num >= 5);
-            Console.WriteLine($"Nota del ultimo aprobado {n}");
+//#elif ej4
+            int no = Array.FindLast(notas, num =>  num >= 5);
+            Console.WriteLine($"Nota del ultimo aprobado {no}");
 
-#elif ej5
+//#elif ej5
             int pares = Array.FindAll(notas, num => num % 2 == 0).Length;
             Console.WriteLine($"La cantidad de pares es {pares}");
 
 
-#elif ej6
+//#elif ej6
             string tresCaracteres = Array.Find(palabras, palabra => palabra.Length >= 3);
             Console.WriteLine($"La primera palabra de 3 o mas caracteres es {tresCaracteres}");
 
-#elif ej7
-<<<<<<< HEAD
-            Array.ForEach(palabras, palabra => Console.WriteLine(palabra.ToUpper()));
-=======
-            Array.ForEach(palabras, palabra => Console.WriteLine(palabra.ToUpper()));//TODO revisar
->>>>>>> 64d7f3c05f1f7b7ec5aff988a6ba3a8a1430fdcb
+//#elif ej7
 
-#elif ej8
+            Array.ForEach(palabras, palabra => Console.WriteLine(palabra.ToUpper()));
+
+
+//#elif ej8
             int indice = Array.FindIndex(palabras, palabra => palabra.StartsWith("E"));
             Console.WriteLine($"Posicion palabra que empieza por E es:{indice + 1}");
 
-#endif
+//#endif
         }
 
     }
