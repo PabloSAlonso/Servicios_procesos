@@ -28,13 +28,69 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.btnColor = new System.Windows.Forms.Button();
+            this.btnAll = new System.Windows.Forms.Button();
+            this.btnAny = new System.Windows.Forms.Button();
+            this.txtResultados = new System.Windows.Forms.TextBox();
+            this.SuspendLayout();
+            // 
+            // btnColor
+            // 
+            this.btnColor.Location = new System.Drawing.Point(59, 43);
+            this.btnColor.Name = "btnColor";
+            this.btnColor.Size = new System.Drawing.Size(75, 23);
+            this.btnColor.TabIndex = 0;
+            this.btnColor.Text = "Color";
+            this.btnColor.UseVisualStyleBackColor = true;
+            // 
+            // btnAll
+            // 
+            this.btnAll.Location = new System.Drawing.Point(59, 108);
+            this.btnAll.Name = "btnAll";
+            this.btnAll.Size = new System.Drawing.Size(75, 23);
+            this.btnAll.TabIndex = 1;
+            this.btnAll.Text = "WhenAll";
+            this.btnAll.UseVisualStyleBackColor = true;
+            // 
+            // btnAny
+            // 
+            this.btnAny.Location = new System.Drawing.Point(59, 181);
+            this.btnAny.Name = "btnAny";
+            this.btnAny.Size = new System.Drawing.Size(75, 23);
+            this.btnAny.TabIndex = 2;
+            this.btnAny.Text = "WhenAny";
+            this.btnAny.UseVisualStyleBackColor = true;
+            // 
+            // txtResultados
+            // 
+            this.txtResultados.Location = new System.Drawing.Point(170, 43);
+            this.txtResultados.Multiline = true;
+            this.txtResultados.Name = "txtResultados";
+            this.txtResultados.Size = new System.Drawing.Size(453, 204);
+            this.txtResultados.TabIndex = 3;
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.txtResultados);
+            this.Controls.Add(this.btnAny);
+            this.Controls.Add(this.btnAll);
+            this.Controls.Add(this.btnColor);
+            this.Name = "Form1";
             this.Text = "Form1";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.Button btnColor;
+        private System.Windows.Forms.Button btnAll;
+        private System.Windows.Forms.Button btnAny;
+        private System.Windows.Forms.TextBox txtResultados;
     }
 }
 
