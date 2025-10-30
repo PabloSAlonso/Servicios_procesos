@@ -10,7 +10,6 @@ namespace Ejercicio5
             bool flag;
             do
             {
-                //flag = true;
                 Console.WriteLine("Introduce un numero entero");
                 flag = int.TryParse(Console.ReadLine(), out num);
 
@@ -65,23 +64,12 @@ namespace Ejercicio5
 
             return true;
         }
-        //static void f1()
-        //{
-        //    Console.WriteLine("A");
-        //}
-        //static void f2()
-        //{
-        //    Console.WriteLine("B");
-        //}
-        //static void f3()
-        //{
-        //    Console.WriteLine("C");
-        //}
+
         static void Main(string[] args)
         {
             MenuGenerator(
-                new string[] { "Op1", "Op2", "Op3" },
-                new MyDelegate[] { () => Console.WriteLine("A"), () => Console.WriteLine("B"), () => Console.WriteLine("C") }
+                new string[] { "Op1", "Op2", "Op3" , "Op4"},
+                new MyDelegate[] { () => Console.WriteLine("A"), () => Console.WriteLine("B"), () => Console.WriteLine("C"), () => Console.WriteLine("D") }
             );
 
             Console.WriteLine("Programa finalizado");
