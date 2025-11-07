@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Runtime.Intrinsics.X86;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 namespace Ejercicio1
@@ -19,6 +20,7 @@ namespace Ejercicio1
         //b) Las funciones de hilos serán expresiones lambda(si quieres y los ves claro haz
         //ya directamente este apartado).
         static bool flag = true;
+        static readonly object l = new();
         static void Main(string[] args)
         {
             int num = 0;
@@ -26,14 +28,17 @@ namespace Ejercicio1
             {
                 while (flag)
                 {
-                    if (flag)
+                    lock (l)
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write($"{num,10}");
-                        num++;
-                        if (num > 500 || num < -500)
+                        if (flag)
                         {
-                            flag = false;
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            Console.Write($"{num,10}");
+                            num++;
+                            if (num > 500 || num < -500)
+                            {
+                                flag = false;
+                            }
                         }
                     }
                 }
@@ -43,14 +48,17 @@ namespace Ejercicio1
             {
                 while (flag)
                 {
-                    if (flag)
+                    lock (l)
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write($"{num,10}");
-                        num--;
-                        if (num > 500 || num < -500)
+                        if (flag)
                         {
-                            flag = false;
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write($"{num,10}");
+                            num--;
+                            if (num > 500 || num < -500)
+                            {
+                                flag = false;
+                            }
                         }
                     }
                 }
@@ -58,6 +66,7 @@ namespace Ejercicio1
             });
             threadIncrementa.Start();
             threadDecrementa.Start();
+
         }
     }
 }
