@@ -33,9 +33,9 @@ namespace Ejercicio1
                         if (flag)
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write($"{num,10}");
                             num++;
-                            if (num > 500 || num < -500)
+                            Console.Write($"{num,10}");
+                            if (num > 499 || num < -499)
                             {
                                 flag = false;
                             }
@@ -53,9 +53,9 @@ namespace Ejercicio1
                         if (flag)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.Write($"{num,10}");
                             num--;
-                            if (num > 500 || num < -500)
+                            Console.Write($"{num,10}");
+                            if (num > 499 || num < -499)
                             {
                                 flag = false;
                             }
@@ -66,6 +66,14 @@ namespace Ejercicio1
             });
             threadIncrementa.Start();
             threadDecrementa.Start();
+            threadIncrementa.Join();
+            if (num == 500){
+                Console.WriteLine("Ha ganado el verde!");
+            }
+            if (num == -500)
+            {
+                Console.WriteLine("Ha ganado el rojo!");
+            }
 
         }
     }
