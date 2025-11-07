@@ -19,10 +19,11 @@ namespace Ejercicio1
         //finalizan, luego informa de cual ha ganado.
         //b) Las funciones de hilos serán expresiones lambda(si quieres y los ves claro haz
         //ya directamente este apartado).
-        static bool flag = true;
+
         static readonly object l = new();
         static void Main(string[] args)
         {
+            bool flag = true;
             int num = 0;
             Thread threadIncrementa = new Thread(() =>
             {
@@ -71,7 +72,8 @@ namespace Ejercicio1
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine();
             //threadIncrementa.Join();
-            if (num == 500){
+            if (num == 500)
+            {
                 Console.WriteLine("\nHa ganado el verde!");
             }
             if (num == -500)
