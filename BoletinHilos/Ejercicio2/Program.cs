@@ -9,18 +9,31 @@
             do
             {
                 Console.WriteLine("Introduce un numero entero");
-                flag = int.TryParse(Console.ReadLine(), out num);
+                flag = int.TryParse(Console.ReadLine(), out num); 
 
             } while (!flag);
 
             return num;
         }
+
+       
         static void Main(string[] args)
         {
+            int opcion;
             Thread[] caballos = new Thread[5];
-            Console.WriteLine("=== BIENVENIDO AL HIPÓDROMO VIVAS ===");
-            Console.WriteLine("Selecciona uno de los 5 caballos");
-            int opcion = pedirEntero();
+            for (int i = 0; i < caballos.Length; i++)
+            {
+                //caballos[i] = new Thread();
+                Console.WriteLine();
+            }
+            do
+            {
+                Console.WriteLine("=== BIENVENIDO AL HIPÓDROMO VIVAS ===");
+                Console.WriteLine("Selecciona uno de los 5 caballos (Introduzca 0 para salir)");
+                opcion = pedirEntero();
+                Thread miCaballo = caballos[opcion];
+
+            } while (opcion != 0);
         }
     }
 }
