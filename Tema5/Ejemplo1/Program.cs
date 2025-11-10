@@ -1,4 +1,4 @@
-﻿#define ejemplos3
+﻿#define ejemplos2
 namespace Ejemplo1
 {
     //Uso de Thread
