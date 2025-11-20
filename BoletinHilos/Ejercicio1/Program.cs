@@ -36,7 +36,7 @@ namespace Ejercicio1
                             Console.ForegroundColor = ConsoleColor.Green;
                             num++;
                             Console.Write($"{num,10}");
-                            if (num > 499 || num < -499)
+                            if (num > 499)
                             {
                                 flag = false;
                             }
@@ -56,7 +56,7 @@ namespace Ejercicio1
                             Console.ForegroundColor = ConsoleColor.Red;
                             num--;
                             Console.Write($"{num,10}");
-                            if (num > 499 || num < -499)
+                            if (num < -499)
                             {
                                 flag = false;
                             }
