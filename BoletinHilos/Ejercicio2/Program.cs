@@ -37,19 +37,17 @@
                         Console.WriteLine("*");
                         if (x >= 50)
                         {
+                            x = 0;
                             caballosCorren = false;
-                            ganador = (int)y; //esto nose a que cambiarle el valor
+                            ganador = (int)y;
                         }
-                    } else
-                    {
-                        x = 0;
                     }
                 }
                 Thread.Sleep(numAleatorio(1000));
             }
         }
 
-        static void Main(string[] args)
+        static void Main(string[] args) //TODO cuando vuelves a apostar no corrren y gana el mismo
         {
             int dinero = 1000;
             int apuesta = 0;
