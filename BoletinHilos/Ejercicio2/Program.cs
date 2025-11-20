@@ -40,17 +40,12 @@
                             caballosCorren = false;
                             ganador = (int)y; //esto nose a que cambiarle el valor
                         }
+                    } else
+                    {
+                        x = 0;
                     }
                 }
                 Thread.Sleep(numAleatorio(1000));
-            }
-        }
-
-        public static void iniciarCaballos(Thread[] caballos)
-        {
-            for (int i = 0; i < caballos.Length; i++)
-            {
-                caballos[i] = new Thread(caballosAvanzan);
             }
         }
 
@@ -61,33 +56,40 @@
             int caballoElegido = 0;
             int cantidadCaballos = 0;
             int y = 0;
+            Thread[] caballos;
             do
             {
+                caballoElegido = 0;
+                apuesta = 0;
                 Console.WriteLine("=== BIENVENIDO AL HIPÓDROMO VIVAS ===");
                 Console.WriteLine($"Tu saldo es de {dinero}$");
-                Console.WriteLine("¿Cuantos caballos van a correr?");
+                Console.WriteLine("¿Cuantos caballos van a correr? (Introduzca 0 para salir)");
                 cantidadCaballos = pedirEntero();
-                Thread[] caballos = new Thread[cantidadCaballos];
-                Console.WriteLine($"Selecciona uno de los {cantidadCaballos} caballos (Introduzca 0 para salir)");
-                caballoElegido = pedirEntero();
+                caballos = new Thread[cantidadCaballos];
+                Console.WriteLine($"Selecciona uno de los {cantidadCaballos} caballos ");
+               
                 while (caballoElegido < 1 || caballoElegido > cantidadCaballos)
                 {
                     Console.WriteLine("Mete un numero dentro del rango de caballos");
                     caballoElegido = pedirEntero();
                 }
-                Console.WriteLine("Cual es tu apuesta?");
-                apuesta = pedirEntero();
+                Console.WriteLine($"Cual es tu apuesta? (Saldo {dinero}$)");
                 while (apuesta <= 0 || apuesta > dinero)
                 {
                     Console.WriteLine("introduce un numero mayor que 0 y que puedas pagar!");
                     apuesta = pedirEntero();
                 }
                 dinero -= apuesta;
+
                 Console.WriteLine($"Saldo tras la apuesta:{dinero}");
+                Console.WriteLine("Enter para empezar la carrera");
                 Console.ReadKey();
                 Console.Clear();
                 // Va cada acción en un bucle pq sino no correrian a la vez
-                iniciarCaballos(caballos);
+                for (int i = 0; i < caballos.Length; i++)
+                {
+                    caballos[i] = new Thread(caballosAvanzan);
+                }
                 for (int i = 1; i <= caballos.Length; i++)
                 {
                     caballos[i - 1].Start(y + i);
@@ -97,18 +99,27 @@
                     caballos[i].Join();
                 }
                 Console.Clear();
+                Console.WriteLine($"Ha ganado el caballo {ganador}!");
                 if (ganador == caballoElegido)
                 {
                     Console.WriteLine("Has ganado!");
-                    dinero += (apuesta * 2); 
+                    dinero += (apuesta * 2);
+                    Console.WriteLine($"Has ganado {(apuesta * 2)}$");
                 }
                 else
                 {
-                    Console.WriteLine("Has perdido... ¿quieres volver a perder tu dinero?");
+                    Console.WriteLine("Has perdido...");
                 }
                 Console.ReadKey();
                 Console.Clear();
-            } while (caballoElegido != 0);
+                if (dinero == 0)
+                {
+                    cantidadCaballos = 0;
+                    Console.WriteLine("Te has quedado sin dinero para apostar...");
+                    Console.WriteLine("Enter para salir...");
+                    Console.ReadKey();
+                }
+            } while (cantidadCaballos != 0);
         }
     }
 }
