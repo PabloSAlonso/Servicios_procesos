@@ -9,31 +9,51 @@
             do
             {
                 Console.WriteLine("Introduce un numero entero");
-                flag = int.TryParse(Console.ReadLine(), out num); 
+                flag = int.TryParse(Console.ReadLine(), out num);
 
             } while (!flag);
 
             return num;
         }
 
-       
-        static void Main(string[] args)
+        static readonly object l = new();
+        public static void caballosAvanzan(object y)
         {
-            int opcion;
-            Thread[] caballos = new Thread[5];
+            bool flagComun = true;
+            while (flagComun)
+            {
+                lock (l)
+                {
+                    if (flagComun)
+                    {
+
+                    }
+                }
+            }
+        }
+
+        public static void iniciarCaballos(Thread[] caballos)
+        {
             for (int i = 0; i < caballos.Length; i++)
             {
-                //caballos[i] = new Thread();
-                Console.WriteLine();
+                caballos[i] = new Thread(caballosAvanzan);
             }
+        }
+
+        static void Main(string[] args)
+        {
+            int caballoElegido = 0;
+            int cantidadCaballos = 0;
             do
             {
                 Console.WriteLine("=== BIENVENIDO AL HIPÓDROMO VIVAS ===");
-                Console.WriteLine("Selecciona uno de los 5 caballos (Introduzca 0 para salir)");
-                opcion = pedirEntero();
-                Thread miCaballo = caballos[opcion];
+                Console.WriteLine("¿Cuantos caballos van a correr?");
+                cantidadCaballos = pedirEntero();
+                Thread[] caballos = new Thread[cantidadCaballos];
+                Console.WriteLine($"Selecciona uno de los {cantidadCaballos} caballos (Introduzca 0 para salir)");
 
-            } while (opcion != 0);
+
+            } while (caballoElegido != 0);
         }
     }
 }
