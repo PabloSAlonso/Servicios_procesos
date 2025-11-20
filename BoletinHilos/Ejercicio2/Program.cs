@@ -38,7 +38,7 @@
                         if (x >= 50)
                         {
                             caballosCorren = false;
-                            ganador = (int)y;
+                            ganador = (int)y; //esto nose a que cambiarle el valor
                         }
                     }
                 }
@@ -69,12 +69,14 @@
                 cantidadCaballos = pedirEntero();
                 Thread[] caballos = new Thread[cantidadCaballos];
                 Console.WriteLine($"Selecciona uno de los {cantidadCaballos} caballos (Introduzca 0 para salir)");
+                caballoElegido = pedirEntero();
                 while (caballoElegido < 1 || caballoElegido > cantidadCaballos)
                 {
                     Console.WriteLine("Mete un numero dentro del rango de caballos");
                     caballoElegido = pedirEntero();
                 }
                 Console.WriteLine("Cual es tu apuesta?");
+                apuesta = pedirEntero();
                 while (apuesta <= 0 || apuesta > dinero)
                 {
                     Console.WriteLine("introduce un numero mayor que 0 y que puedas pagar!");
@@ -82,26 +84,29 @@
                 }
                 dinero -= apuesta;
                 Console.WriteLine($"Saldo tras la apuesta:{dinero}");
+                Console.ReadKey();
                 Console.Clear();
                 // Va cada acción en un bucle pq sino no correrian a la vez
                 iniciarCaballos(caballos);
-                for (int i = 0; i < caballos.Length; i++)
+                for (int i = 1; i <= caballos.Length; i++)
                 {
-                    caballos[i].Start(y += 3);
+                    caballos[i - 1].Start(y + i);
                 }
                 for (int i = 0; i < caballos.Length; i++)
                 {
                     caballos[i].Join();
                 }
-                ganador -= caballos.Length;
-                if( ganador == caballoElegido)
+                Console.Clear();
+                if (ganador == caballoElegido)
                 {
                     Console.WriteLine("Has ganado!");
-                } else
+                    dinero += (apuesta * 2); 
+                }
+                else
                 {
                     Console.WriteLine("Has perdido... ¿quieres volver a perder tu dinero?");
                 }
-                    Console.ReadKey();
+                Console.ReadKey();
                 Console.Clear();
             } while (caballoElegido != 0);
         }
