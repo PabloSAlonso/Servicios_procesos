@@ -22,10 +22,11 @@
         }
 
         static readonly object l = new();
+        static bool caballosCorren = true;
+        static int ganador = 0;
         public static void caballosAvanzan(object y)
         {
             int x = 0;
-            bool caballosCorren = true;
             while (caballosCorren)
             {
                 lock (l)
@@ -37,6 +38,7 @@
                         if (x >= 50)
                         {
                             caballosCorren = false;
+                            ganador = (int)y;
                         }
                     }
                 }
@@ -54,12 +56,15 @@
 
         static void Main(string[] args)
         {
+            int dinero = 1000;
+            int apuesta = 0;
             int caballoElegido = 0;
             int cantidadCaballos = 0;
             int y = 0;
             do
             {
                 Console.WriteLine("=== BIENVENIDO AL HIPÓDROMO VIVAS ===");
+                Console.WriteLine($"Tu saldo es de {dinero}$");
                 Console.WriteLine("¿Cuantos caballos van a correr?");
                 cantidadCaballos = pedirEntero();
                 Thread[] caballos = new Thread[cantidadCaballos];
@@ -69,15 +74,35 @@
                     Console.WriteLine("Mete un numero dentro del rango de caballos");
                     caballoElegido = pedirEntero();
                 }
+                Console.WriteLine("Cual es tu apuesta?");
+                while (apuesta <= 0 || apuesta > dinero)
+                {
+                    Console.WriteLine("introduce un numero mayor que 0 y que puedas pagar!");
+                    apuesta = pedirEntero();
+                }
+                dinero -= apuesta;
+                Console.WriteLine($"Saldo tras la apuesta:{dinero}");
                 Console.Clear();
+                // Va cada acción en un bucle pq sino no correrian a la vez
+                iniciarCaballos(caballos);
                 for (int i = 0; i < caballos.Length; i++)
                 {
-                    caballos[i] = new Thread(caballosAvanzan);
-                    caballos[i].Start(y);
-                    y += 3;
+                    caballos[i].Start(y += 3);
                 }
-                
-
+                for (int i = 0; i < caballos.Length; i++)
+                {
+                    caballos[i].Join();
+                }
+                ganador -= caballos.Length;
+                if( ganador == caballoElegido)
+                {
+                    Console.WriteLine("Has ganado!");
+                } else
+                {
+                    Console.WriteLine("Has perdido... ¿quieres volver a perder tu dinero?");
+                }
+                    Console.ReadKey();
+                Console.Clear();
             } while (caballoElegido != 0);
         }
     }
