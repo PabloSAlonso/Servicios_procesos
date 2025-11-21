@@ -37,7 +37,6 @@
                         Console.WriteLine("*");
                         if (x >= 50)
                         {
-                            x = 0;
                             caballosCorren = false;
                             ganador = (int)y;
                         }
