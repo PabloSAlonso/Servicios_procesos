@@ -57,6 +57,7 @@
             Thread[] caballos;
             do
             {
+                caballosCorren = true;
                 caballoElegido = 0;
                 apuesta = 0;
                 Console.WriteLine("=== BIENVENIDO AL HIPÓDROMO VIVAS ===");
