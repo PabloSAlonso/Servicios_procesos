@@ -18,6 +18,7 @@ namespace Ejercicio3
         }
         async Task<string> DownloadFileAsync(string fileName, int delayMs)
         {
+            await Task.Delay(delayMs * 100);
             return $"File {fileName} downloaded in {delayMs} ms";
         }
 
@@ -30,10 +31,8 @@ namespace Ejercicio3
         private async Task btnDescargar_Click(object sender, EventArgs e)
         {
             int aleatorio = numAleatorio(10);
-            Task<string> texto = DownloadFileAsync(txtFileName.Text, aleatorio);
-            string resultado = await texto;
-            await Task.Delay(aleatorio * 100);
-            txtResultados.Text += texto.Result + Environment.NewLine;
+            string texto = await DownloadFileAsync(txtFileName.Text, aleatorio);
+            txtResultados.Text += texto + Environment.NewLine;
         }
     }
 }
