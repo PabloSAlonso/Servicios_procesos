@@ -36,7 +36,7 @@
             // 
             // txtFileName
             // 
-            this.txtFileName.Location = new System.Drawing.Point(138, 68);
+            this.txtFileName.Location = new System.Drawing.Point(138, 75);
             this.txtFileName.Name = "txtFileName";
             this.txtFileName.Size = new System.Drawing.Size(408, 22);
             this.txtFileName.TabIndex = 0;
@@ -45,7 +45,7 @@
             // 
             this.btnDescargar.Location = new System.Drawing.Point(567, 67);
             this.btnDescargar.Name = "btnDescargar";
-            this.btnDescargar.Size = new System.Drawing.Size(75, 23);
+            this.btnDescargar.Size = new System.Drawing.Size(106, 30);
             this.btnDescargar.TabIndex = 1;
             this.btnDescargar.Text = "Descargar";
             this.btnDescargar.UseVisualStyleBackColor = true;
@@ -68,7 +68,7 @@
             this.txtResultados.Size = new System.Drawing.Size(408, 305);
             this.txtResultados.TabIndex = 3;
             // 
-            // Form1
+            // Tasks3
             // 
             this.AcceptButton = this.btnDescargar;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -78,7 +78,7 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.btnDescargar);
             this.Controls.Add(this.txtFileName);
-            this.Name = "Form1";
+            this.Name = "Tasks3";
             this.Text = "Ejercicio Tasks 3";
             this.ResumeLayout(false);
             this.PerformLayout();
