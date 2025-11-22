@@ -27,11 +27,13 @@ namespace Ejercicio3
             return random.Next(maximo);
         }
 
-        private void btnDescargar_Click(object sender, EventArgs e)
+        private async Task btnDescargar_Click(object sender, EventArgs e)
         {
-            Task<string> a = Task.Run(() =>DownloadFileAsync(txtFileName.Text, numAleatorio(10)));
-
-            txtResultados.Text += a.Result + Environment.NewLine;
+            int aleatorio = numAleatorio(10);
+            Task<string> texto = DownloadFileAsync(txtFileName.Text, aleatorio);
+            string resultado = await texto;
+            await Task.Delay(aleatorio * 100);
+            txtResultados.Text += texto.Result + Environment.NewLine;
         }
     }
 }
