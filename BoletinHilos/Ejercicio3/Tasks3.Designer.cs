@@ -1,6 +1,6 @@
 ﻿namespace Ejercicio3
 {
-    partial class Form1
+    partial class Tasks3
     {
         /// <summary>
         /// Variable del diseñador necesaria.
@@ -49,7 +49,6 @@
             this.btnDescargar.TabIndex = 1;
             this.btnDescargar.Text = "Descargar";
             this.btnDescargar.UseVisualStyleBackColor = true;
-            this.btnDescargar.Click += new System.EventHandler(this.btnDescargar_Click);
             // 
             // button2
             // 

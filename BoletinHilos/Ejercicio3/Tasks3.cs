@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Ejercicio3
 {
-    public partial class Form1 : Form
+    public partial class Tasks3 : Form
     {
-        public Form1()
+        public Tasks3()
         {
             InitializeComponent();
         }
@@ -22,7 +22,7 @@ namespace Ejercicio3
         }
 
         Random random = new Random();
-        private int numAleatorio(int maximo)
+        public int numAleatorio(int maximo)
         {
             return random.Next(maximo);
         }
