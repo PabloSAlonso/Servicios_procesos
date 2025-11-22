@@ -62,10 +62,11 @@
             // 
             // txtResultados
             // 
-            this.txtResultados.Location = new System.Drawing.Point(138, 179);
+            this.txtResultados.Location = new System.Drawing.Point(138, 133);
             this.txtResultados.Multiline = true;
             this.txtResultados.Name = "txtResultados";
-            this.txtResultados.Size = new System.Drawing.Size(408, 259);
+            this.txtResultados.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtResultados.Size = new System.Drawing.Size(408, 305);
             this.txtResultados.TabIndex = 3;
             // 
             // Form1
