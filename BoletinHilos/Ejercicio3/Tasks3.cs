@@ -30,8 +30,8 @@ namespace Ejercicio3
 
         private async void btnDescargar_Click(object sender, EventArgs e)
         {
-            int aleatorio = numAleatorio(10);
             //texto es un string que al hacer el await de la tarea lo estamos igualando al resultado de ejecutar dicha tarea, si no hicieramos await no devolveria el string ya que devolveria la propia tarea (Task) sin completar pq el programa seguiria ejecutandose, de esta manera le mandamos esperar a acabar la tarea y obtenemos su resultado
+            int aleatorio = numAleatorio(1000);
             string texto = await DownloadFileAsync(txtFileName.Text, aleatorio); 
             txtResultados.Text += texto + Environment.NewLine;
         }
