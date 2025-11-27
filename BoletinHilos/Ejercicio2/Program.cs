@@ -14,7 +14,7 @@
             } while (!flag);
 
             return num;
-        }
+        }       
         private static Random numeroRandom = new Random();
         public static int numAleatorio(int maximo)
         {
@@ -56,6 +56,7 @@
             Thread[] caballos;
             do
             {
+                caballosCorren = true;
                 caballoElegido = 0;
                 apuesta = 0;
                 Console.WriteLine("=== BIENVENIDO AL HIPÓDROMO VIVAS ===");
@@ -82,7 +83,7 @@
                 Console.WriteLine("Enter para empezar la carrera");
                 Console.ReadKey();
                 Console.Clear();
-                // Va cada acción en un bucle pq sino no correrian a la vez
+                // Va cada acción en un bucle, al igual que se haría con dos hilos sueltos por ejemplo...
                 for (int i = 0; i < caballos.Length; i++)
                 {
                     caballos[i] = new Thread(caballosAvanzan);
