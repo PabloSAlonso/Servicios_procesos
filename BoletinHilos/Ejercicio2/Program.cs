@@ -37,7 +37,6 @@
                         Console.WriteLine("*");
                         if (x >= 50)
                         {
-                            x = 0;
                             caballosCorren = false;
                             ganador = (int)y;
                         }
@@ -47,7 +46,7 @@
             }
         }
 
-        static void Main(string[] args) //TODO cuando vuelves a apostar no corrren y gana el mismo
+        static void Main(string[] args) //TODO cuando vuelves a apostar no corrren y gana el mismo siempre...
         {
             int dinero = 1000;
             int apuesta = 0;
