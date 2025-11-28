@@ -5,9 +5,11 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Ejercicio4
 {
@@ -82,14 +84,26 @@ namespace Ejercicio4
             }
 
             string[] tareasRealizadas = await Task.WhenAll(tareasPosicion);
-            while (tareasPosicion.Count > 0)
-            {
-                foreach (string tareaRealizada in tareasRealizadas)
-                {
 
-                }
+            foreach (string tareaRealizada in tareasRealizadas)
+            {
+                listaResultados.Items.Add(tareaRealizada);
             }
             tareasPosicion.Clear();
+
+        }
+
+        private async void btnHttp_Click(object sender, EventArgs e)
+        {
+            HttpClient http = new HttpClient();
+            try
+            {
+                Task<HttpResponseMessage> tareaPorRealizar = http.GetAsync(txtBoxComun.Text);
+                listaResultados.Items.Add(await tareaPorRealizar);
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }
