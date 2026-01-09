@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace EchoServer_MultiThread
 {
-    internal class Main
+    internal class Principal
     {
+        static void Main(string[] args)
+        {
+            (new EchoServer()).InitServer();
+        }
     }
 }

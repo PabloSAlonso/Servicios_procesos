@@ -28,13 +28,56 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.txtEnviar = new System.Windows.Forms.TextBox();
+            this.txtRecibir = new System.Windows.Forms.TextBox();
+            this.btnEnviar = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // txtEnviar
+            // 
+            this.txtEnviar.Location = new System.Drawing.Point(12, 12);
+            this.txtEnviar.Name = "txtEnviar";
+            this.txtEnviar.Size = new System.Drawing.Size(158, 20);
+            this.txtEnviar.TabIndex = 0;
+            // 
+            // txtRecibir
+            // 
+            this.txtRecibir.Location = new System.Drawing.Point(12, 54);
+            this.txtRecibir.Multiline = true;
+            this.txtRecibir.Name = "txtRecibir";
+            this.txtRecibir.Size = new System.Drawing.Size(239, 174);
+            this.txtRecibir.TabIndex = 1;
+            // 
+            // btnEnviar
+            // 
+            this.btnEnviar.Location = new System.Drawing.Point(176, 12);
+            this.btnEnviar.Name = "btnEnviar";
+            this.btnEnviar.Size = new System.Drawing.Size(75, 23);
+            this.btnEnviar.TabIndex = 2;
+            this.btnEnviar.Text = "Enviar";
+            this.btnEnviar.UseVisualStyleBackColor = true;
+            this.btnEnviar.Click += new System.EventHandler(this.btnEnviar_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(268, 243);
+            this.Controls.Add(this.btnEnviar);
+            this.Controls.Add(this.txtRecibir);
+            this.Controls.Add(this.txtEnviar);
+            this.Name = "Form1";
             this.Text = "Form1";
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.TextBox txtEnviar;
+        private System.Windows.Forms.TextBox txtRecibir;
+        private System.Windows.Forms.Button btnEnviar;
     }
 }
 
