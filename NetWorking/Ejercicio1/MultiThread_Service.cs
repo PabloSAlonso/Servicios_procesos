@@ -15,24 +15,26 @@ namespace Ejercicio1
             using (Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 s.Bind(ie);
-                s.Listen(10);
+                s.Listen(100);
                 Console.WriteLine($"Servidor iniciado. " +
 $"Escuchando en {ie.Address}:{ie.Port}");
                 Console.WriteLine("Esperando conexiones... (Ctrl+C para salir)");
                 try
                 {
-                    while (ServerRunning) 
+                    while (ServerRunning)
                     {
                         Socket client = s.Accept();
-                        Thread hilo = new Thread (() => )
+                        Thread hilo = new Thread(() => ClientDispatcher(client));
+                        hilo.Start();
                     }
-                } catch (SocketException)
+                }
+                catch (SocketException)
                 {
                     Console.WriteLine("Fin de servidor");
                 }
             }
         }
-
+        string pass = "";
         private void ClientDispatcher(Socket sClient)
         {
             using (sClient)
@@ -46,29 +48,71 @@ $"Escuchando en {ie.Address}:{ie.Port}");
                 using (StreamWriter sw = new StreamWriter(ns, codificacion))
                 {
                     sw.AutoFlush = true;
-                    string welcome = "Welcome to The Echo-Logic, Odd, Desiderable, " +
-                    "Incredible, and Javaless Echo Server (T.E.L.O.D.I.J.E Server)";
+                    string welcome = "Bienvenido al Servicio de Fecha y Hora :)\n Comandos: time, date, all, close password";
                     sw.WriteLine(welcome);
                     string? msg = "";
-                    while (msg != null)
+                    try
                     {
-                        try
+                        msg = sr.ReadLine();
+                        if (msg != null)
                         {
-                            msg = sr.ReadLine();
-                            if (msg != null)
+                            if (msg != "time" || msg != "date" || msg != "all" || msg != "close")
                             {
-                                Console.WriteLine($"El cliente dice {msg}");
-                                Thread.Sleep(3000);
-                                sw.WriteLine($"El servidor dice {msg}");
+                                Console.WriteLine($"No se ha reconocido el comando {msg} en la lista de comandos disponibles");
+                                msg = null;
                             }
+                            else
+                            {
+                                switch (msg)
+                                {
+                                    case "time":
+
+                                        break;
+                                    case "date":
+
+                                        break;
+                                    case "all":
+
+                                        break;
+                                    case "close":
+
+                                        break;
+                                }
+                            }
+                            Console.WriteLine($"El cliente dice {msg}");
+                            Thread.Sleep(3000);
+                            sw.WriteLine($"El servidor dice {msg}");
                         }
-                        catch (IOException)
-                        {
-                            msg = null;
-                        }
+                    }
+                    catch (IOException)
+                    {
+                        msg = null;
                     }
                     Console.WriteLine("Cliente desconectado.\nConexión cerrada");
                 }
+            }
+        }
+        string ProgramData = Environment.GetEnvironmentVariable("ProgramData");
+        string Pass = "";
+        public bool GestionarPassword(string pass)
+        {
+            DirectoryInfo d;
+            StreamReader sr;
+            Directory.SetCurrentDirectory(ProgramData);
+            d = new DirectoryInfo(Directory.GetCurrentDirectory());
+            foreach (FileInfo file in d.GetFiles())
+            {
+                if (file.Name == "password")
+                {
+                    using (sr = new StreamReader(file.Name))
+                    {
+                        Pass = sr.ReadToEnd();
+                    }
+                }
+            }
+            if (Pass == pass)
+            {
+                return true;
             }
         }
         static void Main(string[] args)
