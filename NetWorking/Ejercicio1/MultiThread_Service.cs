@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Ejercicio1
@@ -7,11 +8,11 @@ namespace Ejercicio1
     internal class MultiThread_Service
     {
         public bool ServerRunning { set; get; } = true;
-        public int Port { get; set; } = 31416;
+        public int[] Port { get; set; } = { 31416, 31417, 16178, 18290 };
 
         public void InitServer()
         {
-            IPEndPoint ie = new IPEndPoint(IPAddress.Any, Port);
+            IPEndPoint ie = new IPEndPoint(IPAddress.Any, Port[0]);
             using (Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 s.Bind(ie);
@@ -34,7 +35,6 @@ $"Escuchando en {ie.Address}:{ie.Port}");
                 }
             }
         }
-        string pass = "";
         private void ClientDispatcher(Socket sClient)
         {
             using (sClient)
@@ -48,76 +48,108 @@ $"Escuchando en {ie.Address}:{ie.Port}");
                 using (StreamWriter sw = new StreamWriter(ns, codificacion))
                 {
                     sw.AutoFlush = true;
-                    string welcome = "Bienvenido al Servicio de Fecha y Hora :)\n Comandos: time, date, all, close password";
+                    string welcome = "Bienvenido al Servicio de Fecha y Hora, Comandos: time, date, all, close password";
+                    string pass = "";
+                    int longitud = 0;
+                    (pass, longitud) = GestionarPassword("password.txt");
                     sw.WriteLine(welcome);
                     string? msg = "";
+                    string comando;
+                    DateTime ahora;
                     try
                     {
                         msg = sr.ReadLine();
+                        comando = msg.Split(' ')[0];
                         if (msg != null)
                         {
-                            if (msg != "time" || msg != "date" || msg != "all" || msg != "close")
+                            switch (comando)
                             {
-                                Console.WriteLine($"No se ha reconocido el comando {msg} en la lista de comandos disponibles");
-                                msg = null;
+                                case "time":
+                                    ahora = DateTime.Now;
+                                    sw.WriteLine(ahora.ToString("HH:mm:ss"));
+                                    break;
+                                case "date":
+                                    ahora = DateTime.Now;
+                                    sw.WriteLine(ahora.ToString("dd-MM-yyyy"));
+
+                                    break;
+                                case "all":
+                                    ahora = DateTime.Now;
+                                    sw.WriteLine(ahora.ToString("dd-MM-yyyy HH:mm:ss"));
+
+                                    break;
+                                case "close":
+                                    if (msg == $"close {pass}")
+                                    {
+                                        sw.WriteLine("El servidor ha sido finalizado");
+                                        ServerRunning = false;
+                                        //Cerrar conexion del servidor
+                                    }
+                                    else
+                                    {
+                                        if (msg.Trim() == "close")
+                                        {
+                                            sw.WriteLine("No has indicado una contraseña");
+                                        }
+                                        else
+                                        {
+                                            sw.WriteLine("Contraseña incorrecta");
+                                        }
+                                    }
+                                    break;
+                                default:
+                                    Console.WriteLine($"No se ha reconocido el comando {msg} en la lista de comandos disponibles");
+                                    msg = null;
+                                    break;
                             }
-                            else
-                            {
-                                switch (msg)
-                                {
-                                    case "time":
+                            Console.WriteLine($"El cliente dijo {msg}");
 
-                                        break;
-                                    case "date":
-
-                                        break;
-                                    case "all":
-
-                                        break;
-                                    case "close":
-
-                                        break;
-                                }
-                            }
-                            Console.WriteLine($"El cliente dice {msg}");
-                            Thread.Sleep(3000);
-                            sw.WriteLine($"El servidor dice {msg}");
                         }
                     }
                     catch (IOException)
                     {
                         msg = null;
                     }
-                    Console.WriteLine("Cliente desconectado.\nConexión cerrada");
                 }
             }
         }
+
         string ProgramData = Environment.GetEnvironmentVariable("ProgramData");
-        string Pass = "";
-        public bool GestionarPassword(string pass)
+        public (string, int) GestionarPassword(string NombreArchivo)
         {
-            DirectoryInfo d;
-            StreamReader sr;
-            Directory.SetCurrentDirectory(ProgramData);
-            d = new DirectoryInfo(Directory.GetCurrentDirectory());
-            foreach (FileInfo file in d.GetFiles())
+            try
             {
-                if (file.Name == "password")
+                string Pass = "";
+                int LongitudPass = 0;
+                DirectoryInfo d;
+                StreamReader sr;
+                d = new DirectoryInfo(ProgramData);
+                foreach (FileInfo file in d.GetFiles())
                 {
-                    using (sr = new StreamReader(file.Name))
+                    Console.WriteLine(ProgramData + "\\" + file.Name);
+                    if (file.FullName == NombreArchivo)
                     {
-                        Pass = sr.ReadToEnd();
+                        using (sr = new StreamReader(ProgramData + "\\" + file.FullName))
+                        {
+                            Pass = sr.ReadToEnd().Trim();
+                            LongitudPass = Pass.Length;
+                        }
                     }
                 }
+                return (Pass, LongitudPass);
+
             }
-            if (Pass == pass)
+            catch (Exception e) when (e is IOException || e is FileNotFoundException)
             {
-                return true;
+                //Devuelvo una pass por defecto en caso de error con el archivo
+                return ("password", 8);
             }
         }
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            (string pass, int longitud) = new MultiThread_Service().GestionarPassword("password.txt");
+            Console.WriteLine($"Pass:{pass}, Longitud{longitud}");
+            new MultiThread_Service().InitServer();
         }
     }
 }
