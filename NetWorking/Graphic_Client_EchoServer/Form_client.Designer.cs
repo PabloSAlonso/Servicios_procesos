@@ -1,6 +1,6 @@
 ﻿namespace Graphic_Client_EchoServer
 {
-    partial class Form1
+    partial class Form_client
     {
         /// <summary>
         /// Variable del diseñador necesaria.

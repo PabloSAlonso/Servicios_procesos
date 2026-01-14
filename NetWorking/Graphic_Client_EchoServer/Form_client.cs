@@ -13,9 +13,9 @@ using System.Windows.Forms;
 
 namespace Graphic_Client_EchoServer
 {
-    public partial class Form1 : Form
+    public partial class Form_client : Form
     {
-        public Form1()
+        public Form_client()
         {
             InitializeComponent();
         }

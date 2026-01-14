@@ -5,27 +5,57 @@ using System.Text;
 
 namespace Ejercicio1
 {
-    internal class MultiThread_Service
+    internal class MultiThread_Service  //Puerto ocupado
     {
         public bool ServerRunning { set; get; } = true;
-        public int[] Port { get; set; } = { 31416, 31417, 16178, 18290 };
+        public int Port { set; get; } = 0;
 
-        public void InitServer()
+        int[] OpcionesPuerto = { 135, 31416, 16178 };
+        public int GestionarPuerto()
         {
-            IPEndPoint ie = new IPEndPoint(IPAddress.Any, Port[0]);
-            using (Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            int i = 0;
+            bool PuertoLibre = false;
+            IPEndPoint ie = new IPEndPoint(IPAddress.Any, OpcionesPuerto[i]);
+            using (s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
-                s.Bind(ie);
-                s.Listen(100);
-                Console.WriteLine($"Servidor iniciado. " +
-$"Escuchando en {ie.Address}:{ie.Port}");
-                Console.WriteLine("Esperando conexiones... (Ctrl+C para salir)");
                 try
                 {
+                    while (!PuertoLibre)
+                    {
+                        s.Bind(ie);
+                        Console.WriteLine($"Servidor iniciado. " +
+        $"Escuchando en {ie.Address}:{ie.Port}");
+                        s.Listen(1);
+                    }
+                }
+                catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
+                {
+                    Console.WriteLine($"Puerto {Port} en uso");
+                    i++;
+
+                }
+
+            }
+            return OpcionesPuerto[i];
+        }
+        public void InitServer()
+        {
+            Port = GestionarPuerto();
+            IPEndPoint ie = new IPEndPoint(IPAddress.Any, Port);
+            Console.WriteLine("Esperando conexiones... (Ctrl+C para salir)");
+            using (s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                try
+                {
+                    s.Bind(ie);
+                    Console.WriteLine($"Servidor iniciado. " +
+    $"Escuchando en {ie.Address}:{ie.Port}");
+                    s.Listen(1);
                     while (ServerRunning)
                     {
                         Socket client = s.Accept();
                         Thread hilo = new Thread(() => ClientDispatcher(client));
+                        hilo.IsBackground = true;
                         hilo.Start();
                     }
                 }
@@ -35,6 +65,7 @@ $"Escuchando en {ie.Address}:{ie.Port}");
                 }
             }
         }
+        private Socket s;
         private void ClientDispatcher(Socket sClient)
         {
             using (sClient)
@@ -48,10 +79,8 @@ $"Escuchando en {ie.Address}:{ie.Port}");
                 using (StreamWriter sw = new StreamWriter(ns, codificacion))
                 {
                     sw.AutoFlush = true;
-                    string welcome = "Bienvenido al Servicio de Fecha y Hora, Comandos: time, date, all, close password";
-                    string pass = "";
-                    int longitud = 0;
-                    (pass, longitud) = GestionarPassword("password.txt");
+                    string welcome = "Bienvenido al Servicio de Fecha y Hora, Comandos: time | date | all | close *****";
+                    string pass = GestionarPassword("password.txt");
                     sw.WriteLine(welcome);
                     string? msg = "";
                     string comando;
@@ -59,9 +88,9 @@ $"Escuchando en {ie.Address}:{ie.Port}");
                     try
                     {
                         msg = sr.ReadLine();
-                        comando = msg.Split(' ')[0];
                         if (msg != null)
                         {
+                            comando = msg.Split(' ')[0];
                             switch (comando)
                             {
                                 case "time":
@@ -71,19 +100,15 @@ $"Escuchando en {ie.Address}:{ie.Port}");
                                 case "date":
                                     ahora = DateTime.Now;
                                     sw.WriteLine(ahora.ToString("dd-MM-yyyy"));
-
                                     break;
                                 case "all":
                                     ahora = DateTime.Now;
                                     sw.WriteLine(ahora.ToString("dd-MM-yyyy HH:mm:ss"));
-
                                     break;
                                 case "close":
                                     if (msg == $"close {pass}")
                                     {
-                                        sw.WriteLine("El servidor ha sido finalizado");
-                                        ServerRunning = false;
-                                        //Cerrar conexion del servidor
+                                        CerrarServidor();
                                     }
                                     else
                                     {
@@ -99,11 +124,10 @@ $"Escuchando en {ie.Address}:{ie.Port}");
                                     break;
                                 default:
                                     Console.WriteLine($"No se ha reconocido el comando {msg} en la lista de comandos disponibles");
-                                    msg = null;
+                                    Console.WriteLine("Comandos disponibles: time | date | all | close *****");
                                     break;
                             }
-                            Console.WriteLine($"El cliente dijo {msg}");
-
+                            Console.WriteLine($"El cliente usó {msg}");
                         }
                     }
                     catch (IOException)
@@ -115,41 +139,37 @@ $"Escuchando en {ie.Address}:{ie.Port}");
         }
 
         string ProgramData = Environment.GetEnvironmentVariable("ProgramData");
-        public (string, int) GestionarPassword(string NombreArchivo)
+        public string GestionarPassword(string NombreArchivo)
         {
             try
             {
                 string Pass = "";
-                int LongitudPass = 0;
                 DirectoryInfo d;
                 StreamReader sr;
                 d = new DirectoryInfo(ProgramData);
-                foreach (FileInfo file in d.GetFiles())
+                Directory.SetCurrentDirectory(d.Name);
+                string archivo = "password.txt";
+                if (File.Exists(archivo))
                 {
-                    Console.WriteLine(ProgramData + "\\" + file.Name);
-                    if (file.FullName == NombreArchivo)
+                    using (sr = new StreamReader(ProgramData + "\\" + archivo))
                     {
-                        using (sr = new StreamReader(ProgramData + "\\" + file.FullName))
-                        {
-                            Pass = sr.ReadToEnd().Trim();
-                            LongitudPass = Pass.Length;
-                        }
+                        Pass = sr.ReadLine();
                     }
                 }
-                return (Pass, LongitudPass);
-
+                return Pass;
             }
             catch (Exception e) when (e is IOException || e is FileNotFoundException)
             {
                 //Devuelvo una pass por defecto en caso de error con el archivo
-                return ("password", 8);
+                return "password";
             }
         }
-        static void Main(string[] args)
+
+        public void CerrarServidor()
         {
-            (string pass, int longitud) = new MultiThread_Service().GestionarPassword("password.txt");
-            Console.WriteLine($"Pass:{pass}, Longitud{longitud}");
-            new MultiThread_Service().InitServer();
+            Console.WriteLine("Cerrando Servidor");
+            ServerRunning = false;
+            s.Close();
         }
     }
 }
