@@ -30,7 +30,7 @@ namespace Ejercicio1
                 }
                 catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
                 {
-                    Console.WriteLine($"Puerto {Port} en uso");
+                    Console.WriteLine($"Puerto {OpcionesPuerto[i]} en uso");
                     i++;
 
                 }
