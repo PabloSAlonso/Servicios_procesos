@@ -64,7 +64,22 @@ namespace Cliente_Ejercicio1
 
         private void btnes_Click(object sender, EventArgs e)
         {
+            switch (((Button)sender).Tag)
+            {
+                case "time":
 
+                    break;
+                case "date":
+
+                    break;
+                case "all":
+
+                    break;
+                case "close":
+
+                    break;
+
+            }
         }
     }
 }

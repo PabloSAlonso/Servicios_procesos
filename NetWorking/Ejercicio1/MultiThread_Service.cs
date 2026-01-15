@@ -23,8 +23,8 @@ namespace Ejercicio1
                     {
                         IPEndPoint ie = new IPEndPoint(IPAddress.Any, OpcionesPuerto[i]);
                         s.Bind(ie);
-                        Console.WriteLine($"Servidor iniciado. " +
-        $"Escuchando en {ie.Address}:{ie.Port}");
+        //                Console.WriteLine($"Servidor iniciado. " +
+        //$"Escuchando en {ie.Address}:{ie.Port}");
                         s.Listen(1);
                         PuertoLibre = true;
                     }
