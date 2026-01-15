@@ -19,10 +19,11 @@ namespace Cliente_Ejercicio1
         {
             InitializeComponent();
         }
+
         IPAddress ip = IPAddress.Parse("127.0.0.1");
         int puerto = 31416;
 
-        private async Task<String> EnvioYRecepcionAsync()
+        private async Task<String> EnvioYRecepcionAsync(string comando)
         {
             try
             {
@@ -45,7 +46,9 @@ namespace Cliente_Ejercicio1
                         // Leemos mensaje de bienvenida y lo deshechamos
                         // (No hacemos nada con él).
                         string msg = await sr.ReadLineAsync();
-
+                        // Se escribe el comando que depende del boton pulsado
+                        await sw.WriteLineAsync(comando);
+                        msg = await sr.ReadLineAsync();
                         return msg;
                     }
                 }
@@ -64,21 +67,44 @@ namespace Cliente_Ejercicio1
 
         private void btnes_Click(object sender, EventArgs e)
         {
-            switch (((Button)sender).Tag)
+            EnvioYRecepcionAsync(((Button)sender).Text);
+        }
+
+        private void btnDialogo_Click(object sender, EventArgs e)
+        {
+            bool flag = true;
+            Form form = new Modal();
+            form.tbIp.Text = ip.ToString();
+            DialogResult result;
+            result = form.ShowDialog();
+            if (result == DialogResult.Cancel)
             {
-                case "time":
+                MessageBox.Show("No se han guardado la Ip y Puerto nuevo", "ADVERTENCIA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (result == DialogResult.OK)
+            {
+                int puertoMaximo = IPEndPoint.MaxPort;
 
-                    break;
-                case "date":
+                if(!IPAddress.TryParse(form.tbIp.Text, out IPAddress ipValidada))
+                {
 
-                    break;
-                case "all":
+                }
+                if (flag)
+                {
+                    ip = ipValidada;
+                }
+            }
+        }
 
-                    break;
-                case "close":
-
-                    break;
-
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            if (txtPass.Text == "")
+            {
+                EnvioYRecepcionAsync("close");
+            }
+            else
+            {
+                EnvioYRecepcionAsync($"close {txtPass.Text}");
             }
         }
     }

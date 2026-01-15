@@ -33,9 +33,10 @@
             this.btnDate = new System.Windows.Forms.Button();
             this.btnAll = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtPass = new System.Windows.Forms.TextBox();
             this.lblResultado = new System.Windows.Forms.Label();
             this.lblPass = new System.Windows.Forms.Label();
+            this.btnDialogo = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnTime
@@ -80,14 +81,14 @@
             this.btnClose.Tag = "close";
             this.btnClose.Text = "close";
             this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnes_Click);
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // textBox1
+            // txtPass
             // 
-            this.textBox1.Location = new System.Drawing.Point(13, 85);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(318, 20);
-            this.textBox1.TabIndex = 4;
+            this.txtPass.Location = new System.Drawing.Point(13, 85);
+            this.txtPass.Name = "txtPass";
+            this.txtPass.Size = new System.Drawing.Size(318, 20);
+            this.txtPass.TabIndex = 4;
             // 
             // lblResultado
             // 
@@ -107,14 +108,25 @@
             this.lblPass.TabIndex = 6;
             this.lblPass.Text = "Introduce aqui la contraseña para cerrar el servidor";
             // 
+            // btnDialogo
+            // 
+            this.btnDialogo.Location = new System.Drawing.Point(473, 12);
+            this.btnDialogo.Name = "btnDialogo";
+            this.btnDialogo.Size = new System.Drawing.Size(75, 23);
+            this.btnDialogo.TabIndex = 7;
+            this.btnDialogo.Text = "Ip / Puerto";
+            this.btnDialogo.UseVisualStyleBackColor = true;
+            this.btnDialogo.Click += new System.EventHandler(this.btnDialogo_Click);
+            // 
             // Formulario_cliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 125);
+            this.Controls.Add(this.btnDialogo);
             this.Controls.Add(this.lblPass);
             this.Controls.Add(this.lblResultado);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtPass);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnAll);
             this.Controls.Add(this.btnDate);
@@ -134,9 +146,10 @@
         private System.Windows.Forms.Button btnDate;
         private System.Windows.Forms.Button btnAll;
         private System.Windows.Forms.Button btnClose;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtPass;
         private System.Windows.Forms.Label lblResultado;
         private System.Windows.Forms.Label lblPass;
+        private System.Windows.Forms.Button btnDialogo;
     }
 }
 
