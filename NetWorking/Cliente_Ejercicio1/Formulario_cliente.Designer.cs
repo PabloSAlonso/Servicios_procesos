@@ -46,6 +46,7 @@
             this.btnTime.TabIndex = 0;
             this.btnTime.Text = "time";
             this.btnTime.UseVisualStyleBackColor = true;
+            this.btnTime.Click += new System.EventHandler(this.btnes_Click);
             // 
             // btnDate
             // 
@@ -55,6 +56,7 @@
             this.btnDate.TabIndex = 1;
             this.btnDate.Text = "date";
             this.btnDate.UseVisualStyleBackColor = true;
+            this.btnDate.Click += new System.EventHandler(this.btnes_Click);
             // 
             // btnAll
             // 
@@ -64,6 +66,7 @@
             this.btnAll.TabIndex = 2;
             this.btnAll.Text = "all";
             this.btnAll.UseVisualStyleBackColor = true;
+            this.btnAll.Click += new System.EventHandler(this.btnes_Click);
             // 
             // btnClose
             // 
@@ -73,7 +76,7 @@
             this.btnClose.TabIndex = 3;
             this.btnClose.Text = "close";
             this.btnClose.UseVisualStyleBackColor = true;
-            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
+            this.btnClose.Click += new System.EventHandler(this.btnes_Click);
             // 
             // textBox1
             // 

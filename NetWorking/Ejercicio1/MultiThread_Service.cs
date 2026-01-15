@@ -5,36 +5,35 @@ using System.Text;
 
 namespace Ejercicio1
 {
-    internal class MultiThread_Service  //Puerto ocupado
+    internal class MultiThread_Service  //Puerto ocupado arreglau
     {
         public bool ServerRunning { set; get; } = true;
         public int Port { set; get; } = 0;
 
-        int[] OpcionesPuerto = { 135, 31416, 16178 };
+        int[] OpcionesPuerto = { 135, 31416, 135 };
         public int GestionarPuerto()
         {
             int i = 0;
             bool PuertoLibre = false;
-            IPEndPoint ie = new IPEndPoint(IPAddress.Any, OpcionesPuerto[i]);
             using (s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
-                try
+                do
                 {
-                    while (!PuertoLibre)
+                    try
                     {
+                        IPEndPoint ie = new IPEndPoint(IPAddress.Any, OpcionesPuerto[i]);
                         s.Bind(ie);
                         Console.WriteLine($"Servidor iniciado. " +
         $"Escuchando en {ie.Address}:{ie.Port}");
                         s.Listen(1);
+                        PuertoLibre = true;
                     }
-                }
-                catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
-                {
-                    Console.WriteLine($"Puerto {OpcionesPuerto[i]} en uso");
-                    i++;
-
-                }
-
+                    catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
+                    {
+                        Console.WriteLine($"Puerto {OpcionesPuerto[i]} en uso");
+                        i++;
+                    }
+                } while (!PuertoLibre && i <= OpcionesPuerto.Length - 1);
             }
             return OpcionesPuerto[i];
         }

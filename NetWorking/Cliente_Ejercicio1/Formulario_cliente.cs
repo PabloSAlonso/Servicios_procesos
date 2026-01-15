@@ -45,7 +45,7 @@ namespace Cliente_Ejercicio1
                         // Leemos mensaje de bienvenida y lo deshechamos
                         // (No hacemos nada con él).
                         string msg = await sr.ReadLineAsync();
-                        
+
                         return msg;
                     }
                 }
@@ -62,7 +62,7 @@ namespace Cliente_Ejercicio1
             }
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private void btnes_Click(object sender, EventArgs e)
         {
 
         }
