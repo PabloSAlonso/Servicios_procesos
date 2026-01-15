@@ -18,6 +18,8 @@ namespace Cliente_Ejercicio1
         public Formulario_cliente()
         {
             InitializeComponent();
+            lblIp.Text = $"Ip:{ip.ToString()}";
+            lblPuerto.Text = $"Puerto:{puerto.ToString()}";
         }
 
         IPAddress ip = IPAddress.Parse("127.0.0.1");
@@ -73,8 +75,9 @@ namespace Cliente_Ejercicio1
         private void btnDialogo_Click(object sender, EventArgs e)
         {
             bool flag = true;
-            Form form = new Modal();
+            Modal form = new Modal();
             form.tbIp.Text = ip.ToString();
+            form.tbPort.Text = puerto.ToString();
             DialogResult result;
             result = form.ShowDialog();
             if (result == DialogResult.Cancel)
@@ -84,14 +87,23 @@ namespace Cliente_Ejercicio1
             else if (result == DialogResult.OK)
             {
                 int puertoMaximo = IPEndPoint.MaxPort;
-
+                flag = true;
                 if(!IPAddress.TryParse(form.tbIp.Text, out IPAddress ipValidada))
                 {
-
+                    MessageBox.Show("Error con la IP, tal vez te has equivocado introduciendola", "IP NO VÁLIDA", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    flag = false;
+                }
+                if (int.TryParse(form.tbPort.Text, out int puertoValidado))
+                {
+                    MessageBox.Show("Error con El puerto, tal vez te has equivocado introduciendo un numero de puerto", "PUERTO NO VÁLIDO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    flag = false;
                 }
                 if (flag)
                 {
                     ip = ipValidada;
+                    puerto = puertoValidado;
+                    lblIp.Text = ip.ToString();
+                    lblPuerto.Text = puerto.ToString();
                 }
             }
         }

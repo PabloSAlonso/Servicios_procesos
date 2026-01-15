@@ -37,6 +37,8 @@
             this.lblResultado = new System.Windows.Forms.Label();
             this.lblPass = new System.Windows.Forms.Label();
             this.btnDialogo = new System.Windows.Forms.Button();
+            this.lblIp = new System.Windows.Forms.Label();
+            this.lblPuerto = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnTime
@@ -118,11 +120,31 @@
             this.btnDialogo.UseVisualStyleBackColor = true;
             this.btnDialogo.Click += new System.EventHandler(this.btnDialogo_Click);
             // 
+            // lblIp
+            // 
+            this.lblIp.AutoSize = true;
+            this.lblIp.Location = new System.Drawing.Point(473, 54);
+            this.lblIp.Name = "lblIp";
+            this.lblIp.Size = new System.Drawing.Size(19, 13);
+            this.lblIp.TabIndex = 8;
+            this.lblIp.Text = "Ip:";
+            // 
+            // lblPuerto
+            // 
+            this.lblPuerto.AutoSize = true;
+            this.lblPuerto.Location = new System.Drawing.Point(473, 87);
+            this.lblPuerto.Name = "lblPuerto";
+            this.lblPuerto.Size = new System.Drawing.Size(41, 13);
+            this.lblPuerto.TabIndex = 9;
+            this.lblPuerto.Text = "Puerto:";
+            // 
             // Formulario_cliente
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(606, 125);
+            this.Controls.Add(this.lblPuerto);
+            this.Controls.Add(this.lblIp);
             this.Controls.Add(this.btnDialogo);
             this.Controls.Add(this.lblPass);
             this.Controls.Add(this.lblResultado);
@@ -150,6 +172,8 @@
         private System.Windows.Forms.Label lblResultado;
         private System.Windows.Forms.Label lblPass;
         private System.Windows.Forms.Button btnDialogo;
+        private System.Windows.Forms.Label lblIp;
+        private System.Windows.Forms.Label lblPuerto;
     }
 }
 
