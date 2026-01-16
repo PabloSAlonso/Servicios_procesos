@@ -98,6 +98,11 @@ namespace Cliente_Ejercicio1
                     MessageBox.Show("Error con El puerto, tal vez te has equivocado introduciendo un numero de puerto", "PUERTO NO VÁLIDO", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     flag = false;
                 }
+                if (puertoValidado < 0 || puertoValidado > puertoMaximo) 
+                {
+                    MessageBox.Show("Error con El puerto, has introducido un valor fuera de rango", "PUERTO NO VÁLIDO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    flag = false;
+                }
                 if (flag)
                 {
                     ip = ipValidada;

@@ -87,7 +87,7 @@
             // 
             // txtPass
             // 
-            this.txtPass.Location = new System.Drawing.Point(13, 85);
+            this.txtPass.Location = new System.Drawing.Point(13, 55);
             this.txtPass.Name = "txtPass";
             this.txtPass.Size = new System.Drawing.Size(318, 20);
             this.txtPass.TabIndex = 4;
@@ -95,7 +95,7 @@
             // lblResultado
             // 
             this.lblResultado.AutoSize = true;
-            this.lblResultado.Location = new System.Drawing.Point(337, 88);
+            this.lblResultado.Location = new System.Drawing.Point(12, 87);
             this.lblResultado.Name = "lblResultado";
             this.lblResultado.Size = new System.Drawing.Size(58, 13);
             this.lblResultado.TabIndex = 5;
@@ -104,7 +104,7 @@
             // lblPass
             // 
             this.lblPass.AutoSize = true;
-            this.lblPass.Location = new System.Drawing.Point(49, 69);
+            this.lblPass.Location = new System.Drawing.Point(53, 39);
             this.lblPass.Name = "lblPass";
             this.lblPass.Size = new System.Drawing.Size(247, 13);
             this.lblPass.TabIndex = 6;
@@ -112,7 +112,7 @@
             // 
             // btnDialogo
             // 
-            this.btnDialogo.Location = new System.Drawing.Point(473, 12);
+            this.btnDialogo.Location = new System.Drawing.Point(378, 13);
             this.btnDialogo.Name = "btnDialogo";
             this.btnDialogo.Size = new System.Drawing.Size(75, 23);
             this.btnDialogo.TabIndex = 7;
@@ -123,7 +123,7 @@
             // lblIp
             // 
             this.lblIp.AutoSize = true;
-            this.lblIp.Location = new System.Drawing.Point(473, 54);
+            this.lblIp.Location = new System.Drawing.Point(375, 55);
             this.lblIp.Name = "lblIp";
             this.lblIp.Size = new System.Drawing.Size(19, 13);
             this.lblIp.TabIndex = 8;
@@ -132,7 +132,7 @@
             // lblPuerto
             // 
             this.lblPuerto.AutoSize = true;
-            this.lblPuerto.Location = new System.Drawing.Point(473, 87);
+            this.lblPuerto.Location = new System.Drawing.Point(375, 87);
             this.lblPuerto.Name = "lblPuerto";
             this.lblPuerto.Size = new System.Drawing.Size(41, 13);
             this.lblPuerto.TabIndex = 9;
@@ -142,7 +142,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 125);
+            this.ClientSize = new System.Drawing.Size(570, 125);
             this.Controls.Add(this.lblPuerto);
             this.Controls.Add(this.lblIp);
             this.Controls.Add(this.btnDialogo);
