@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Modal));
             this.tbIp = new System.Windows.Forms.TextBox();
             this.tbPort = new System.Windows.Forms.TextBox();
             this.btnAceptar = new System.Windows.Forms.Button();
@@ -98,6 +99,7 @@
             this.Controls.Add(this.btnAceptar);
             this.Controls.Add(this.tbPort);
             this.Controls.Add(this.tbIp);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Modal";
             this.Text = "Modal";
             this.ResumeLayout(false);

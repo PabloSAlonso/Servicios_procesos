@@ -50,7 +50,7 @@
             this.btnTime.Tag = "time";
             this.btnTime.Text = "time";
             this.btnTime.UseVisualStyleBackColor = true;
-            this.btnTime.Click += new System.EventHandler(this.btnes_Click);
+            this.btnTime.Click += new System.EventHandler(this.btnes_ClickAsync);
             // 
             // btnDate
             // 
@@ -61,7 +61,7 @@
             this.btnDate.Tag = "date";
             this.btnDate.Text = "date";
             this.btnDate.UseVisualStyleBackColor = true;
-            this.btnDate.Click += new System.EventHandler(this.btnes_Click);
+            this.btnDate.Click += new System.EventHandler(this.btnes_ClickAsync);
             // 
             // btnAll
             // 
@@ -72,7 +72,7 @@
             this.btnAll.Tag = "all";
             this.btnAll.Text = "all";
             this.btnAll.UseVisualStyleBackColor = true;
-            this.btnAll.Click += new System.EventHandler(this.btnes_Click);
+            this.btnAll.Click += new System.EventHandler(this.btnes_ClickAsync);
             // 
             // btnClose
             // 
@@ -156,7 +156,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Formulario_cliente";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form1";
+            this.Text = "Servicio de Fecha y Hora";
             this.ResumeLayout(false);
             this.PerformLayout();
 

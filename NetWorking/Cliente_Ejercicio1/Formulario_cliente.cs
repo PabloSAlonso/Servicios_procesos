@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Cliente_Ejercicio1
 {
-    public partial class Formulario_cliente : Form
+    public partial class Formulario_cliente : Form//Titulo. Icono sec.Rango puerto. await.
     {
         public Formulario_cliente()
         {
@@ -67,9 +67,9 @@ namespace Cliente_Ejercicio1
             }
         }
 
-        private void btnes_Click(object sender, EventArgs e)
+        private async void btnes_ClickAsync(object sender, EventArgs e)
         {
-            EnvioYRecepcionAsync(((Button)sender).Text);
+            lblResultado.Text = $"Resultado:{await EnvioYRecepcionAsync(((Button)sender).Text)}";
         }
 
         private void btnDialogo_Click(object sender, EventArgs e)
@@ -88,12 +88,12 @@ namespace Cliente_Ejercicio1
             {
                 int puertoMaximo = IPEndPoint.MaxPort;
                 flag = true;
-                if(!IPAddress.TryParse(form.tbIp.Text, out IPAddress ipValidada))
+                if (!IPAddress.TryParse(form.tbIp.Text, out IPAddress ipValidada))
                 {
                     MessageBox.Show("Error con la IP, tal vez te has equivocado introduciendola", "IP NO VÁLIDA", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     flag = false;
                 }
-                if (int.TryParse(form.tbPort.Text, out int puertoValidado))
+                if (!int.TryParse(form.tbPort.Text, out int puertoValidado))
                 {
                     MessageBox.Show("Error con El puerto, tal vez te has equivocado introduciendo un numero de puerto", "PUERTO NO VÁLIDO", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     flag = false;
@@ -102,21 +102,21 @@ namespace Cliente_Ejercicio1
                 {
                     ip = ipValidada;
                     puerto = puertoValidado;
-                    lblIp.Text = ip.ToString();
-                    lblPuerto.Text = puerto.ToString();
+                    lblIp.Text = $"Ip:{ip.ToString()}";
+                    lblPuerto.Text = $"Puerto:{puerto.ToString()}";
                 }
             }
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
+        private async void btnClose_Click(object sender, EventArgs e)
         {
             if (txtPass.Text == "")
             {
-                EnvioYRecepcionAsync("close");
+                await EnvioYRecepcionAsync("close");
             }
             else
             {
-                EnvioYRecepcionAsync($"close {txtPass.Text}");
+                await EnvioYRecepcionAsync($"close {txtPass.Text}");
             }
         }
     }
