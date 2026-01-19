@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace Cliente_Ejercicio1
 {
-    public partial class Formulario_cliente : Form//Titulo. Icono sec.Rango puerto. await.
+    public partial class Formulario_cliente : Form
     {
         public Formulario_cliente()
         {

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Ejercicio1
 {
-    internal class MultiThread_Service  //Puerto ocupado arreglau
+    internal class MultiThread_Service
     {
         public bool ServerRunning { set; get; } = true;
         public int Port { set; get; } = 0;
