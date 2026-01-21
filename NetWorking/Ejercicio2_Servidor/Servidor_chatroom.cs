@@ -87,21 +87,28 @@ namespace Ejercicio2_Servidor
                     string welcome = "Bienvenido al servicio de chatroom";
                     sw.WriteLine(welcome);
                     string? msg = "";
-                    nuevoCliente = new Cliente();
+                    string? nombre = "";
                     sw.WriteLine("Introduzca su nombre de usuario");
                     try
                     {
-                        msg = sr.ReadLine();
-                        nuevoCliente.nombre_usuario = msg;
+                        nombre = sr.ReadLine().Trim();
+                        nuevoCliente = new Cliente(ieClient.Address, nombre, sw);
+                        sw.WriteLine($"Su nombre es:{nombre}");
+                        clientes.Add(nuevoCliente);
+                        while (msg != null)
+                        {
+                            switch (msg)
+                            {
+
+                            }
+                        }
+
                     }
-                    catch (Exception ex)
+                    catch (ArgumentNullException ex)
                     {
                         sw.WriteLine("User no válido, desconectando del servidor");
                         msg = null;
-                        
                     }
-                    sw.WriteLine($"Su nombre es:{nuevoCliente.nombre_usuario}");
-                    clientes.Add(nuevoCliente);
 
                 }
             }
