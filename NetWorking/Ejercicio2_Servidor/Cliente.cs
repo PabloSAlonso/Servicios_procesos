@@ -19,5 +19,10 @@ namespace Ejercicio2_Servidor
             this.nombre_usuario = nombre;
             this.sw = sw;
         }
+
+        public override string ToString()
+        {
+            return $"{nombre_usuario}@{IP}";
+        }
     }
 }

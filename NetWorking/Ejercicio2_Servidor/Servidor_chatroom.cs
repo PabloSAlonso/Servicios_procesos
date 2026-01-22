@@ -93,22 +93,41 @@ namespace Ejercicio2_Servidor
                     {
                         nombre = sr.ReadLine().Trim();
                         nuevoCliente = new Cliente(ieClient.Address, nombre, sw);
-                        sw.WriteLine($"Su nombre es:{nombre}");
                         clientes.Add(nuevoCliente);
+                        sw.WriteLine($"Su nombre es:{nombre}, ya puede empezar a chatear con el resto de usuarios");
+                        msg = sr.ReadLine();
                         while (msg != null)
                         {
                             switch (msg)
                             {
+                                case "#exit":
+                                    msg = null;
 
+                                    break;
+
+                                case "#list":
+                                    foreach (Cliente cliente in clientes)
+                                    {
+                                        sw.WriteLine(cliente.ToString());
+                                    }
+                                    break;
+
+                                default:
+                                    foreach (Cliente c in clientes)
+                                    {
+                                        // comprobar el sw y sacar lo que escribio
+                                    }
+                                    break;
                             }
                         }
 
                     }
                     catch (ArgumentNullException ex)
                     {
-                        sw.WriteLine("User no válido, desconectando del servidor");
+                        sw.WriteLine("User no válido, desconectandose del servidor");
                         msg = null;
                     }
+                    sw.WriteLine("Desconectado del servidor");
 
                 }
             }
