@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -67,9 +68,21 @@ namespace Ejercicio2_Servidor
                 }
             }
         }
+
+        public void notificarUsuarios(List<Cliente> clientes, string mensaje, StreamWriter sw)
+        {
+            foreach (Cliente cliente in clientes)
+            {
+                if (cliente.sw != sw)
+                {
+                    cliente.sw.WriteLine(mensaje);
+                }
+            }
+        }
+
         private Socket s;
         private List<Cliente> clientes = new();
-        Cliente nuevoCliente;
+        private readonly Object l;
 
         private void ClientDispatcher(Socket sClient)
         {
@@ -83,6 +96,7 @@ namespace Ejercicio2_Servidor
                 using (StreamReader sr = new StreamReader(ns, codificacion))
                 using (StreamWriter sw = new StreamWriter(ns, codificacion))
                 {
+                    Cliente clienteEliminado = null;
                     sw.AutoFlush = true;
                     string welcome = "Bienvenido al servicio de chatroom";
                     sw.WriteLine(welcome);
@@ -92,8 +106,12 @@ namespace Ejercicio2_Servidor
                     try
                     {
                         nombre = sr.ReadLine().Trim();
-                        nuevoCliente = new Cliente(ieClient.Address, nombre, sw);
-                        clientes.Add(nuevoCliente);
+                        Cliente nuevoCliente = new Cliente(ieClient.Address, nombre, sw);
+                        lock (l)
+                        {
+                            clientes.Add(nuevoCliente);
+                        }
+                        notificarUsuarios(clientes, nuevoCliente.ToString() + " se ha unido al servidor", sw);
                         sw.WriteLine($"Su nombre es:{nombre}, ya puede empezar a chatear con el resto de usuarios");
                         msg = sr.ReadLine();
                         while (msg != null)
@@ -102,33 +120,50 @@ namespace Ejercicio2_Servidor
                             {
                                 case "#exit":
                                     msg = null;
-
                                     break;
 
                                 case "#list":
                                     foreach (Cliente cliente in clientes)
                                     {
-                                        sw.WriteLine(cliente.ToString());
+                                        cliente.sw.WriteLine(cliente.ToString());
                                     }
                                     break;
 
                                 default:
                                     foreach (Cliente c in clientes)
                                     {
-                                        // comprobar el sw y sacar lo que escribio
+                                        if (c.sw != sw)
+                                        {
+                                            c.sw.WriteLine($"{nuevoCliente.ToString()}: {msg}");
+                                        }
                                     }
                                     break;
                             }
                         }
 
                     }
-                    catch (ArgumentNullException ex)
+                    catch (Exception ex) when (ex is ArgumentNullException || ex is IOException)
                     {
-                        sw.WriteLine("User no válido, desconectandose del servidor");
-                        msg = null;
+                        sw.WriteLine("Desconectandose del servidor");
                     }
+                    catch (Exception ex)
+                    {
+                        sw.WriteLine("Error inesperado, contacte con soporte");
+                    }
+                    for (int i = 0; i < clientes.Count; i++)
+                    {
+                        if (clientes[i].sw == sw)
+                        {
+                            clienteEliminado = clientes[i];
+                            lock (l)
+                            {
+                                clientes.RemoveAt(i);
+                            }
+                            break; // solo quiero eliminar un cliente, asi lo dejo mas claro
+                        }
+                    }
+                    notificarUsuarios(clientes, clienteEliminado.ToString() + " ha abandonado el servidor", sw);
                     sw.WriteLine("Desconectado del servidor");
-
                 }
             }
         }
