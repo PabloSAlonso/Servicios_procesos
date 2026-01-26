@@ -82,7 +82,7 @@ namespace Ejercicio2_Servidor
 
         private Socket s;
         private List<Cliente> clientes = new();
-        private readonly Object l;
+        static readonly Object l = new object();
 
         private void ClientDispatcher(Socket sClient)
         {
@@ -113,34 +113,34 @@ namespace Ejercicio2_Servidor
                         }
                         notificarUsuarios(clientes, nuevoCliente.ToString() + " se ha unido al servidor", sw);
                         sw.WriteLine($"Su nombre es:{nombre}, ya puede empezar a chatear con el resto de usuarios");
-                        msg = sr.ReadLine();
                         while (msg != null)
                         {
+                            msg = sr.ReadLine();
                             switch (msg)
                             {
-                                case "#exit":
+                                case "exit":
                                     msg = null;
                                     break;
 
-                                case "#list":
+                                case "list":
                                     foreach (Cliente cliente in clientes)
                                     {
-                                        cliente.sw.WriteLine(cliente.ToString());
+                                        if (cliente.sw != sw)
+                                        {
+                                            nuevoCliente.sw.WriteLine(cliente.ToString());
+                                        }
                                     }
+
                                     break;
 
                                 default:
-                                    foreach (Cliente c in clientes)
+                                    if (msg != null)
                                     {
-                                        if (c.sw != sw)
-                                        {
-                                            c.sw.WriteLine($"{nuevoCliente.ToString()}: {msg}");
-                                        }
+                                        notificarUsuarios(clientes, $"{nuevoCliente.ToString()}:{msg}", sw);
                                     }
                                     break;
                             }
                         }
-
                     }
                     catch (Exception ex) when (ex is ArgumentNullException || ex is IOException)
                     {
@@ -159,7 +159,6 @@ namespace Ejercicio2_Servidor
                             {
                                 clientes.RemoveAt(i);
                             }
-                            break; // solo quiero eliminar un cliente, asi lo dejo mas claro
                         }
                     }
                     notificarUsuarios(clientes, clienteEliminado.ToString() + " ha abandonado el servidor", sw);
