@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Ejercicio2_Servidor
 {
-    internal class Servidor_chatroom
+    internal class Servidor_chatroom//Cierre abrupto al inicio. Todos los puertos ocupados. Locks.
     {
         public bool ServerRunning { set; get; } = true;
         public int Port { set; get; } = 0;
 
-        int[] OpcionesPuerto = { 135, 31416, 135 };
+        int[] OpcionesPuerto = { 135, 135, 31416 };
         public int GestionarPuerto()
         {
             int i = 0;
@@ -38,7 +38,7 @@ namespace Ejercicio2_Servidor
                         Console.WriteLine($"Puerto {OpcionesPuerto[i]} en uso");
                         i++;
                     }
-                } while (!PuertoLibre && i <= OpcionesPuerto.Length - 1);
+                } while (!PuertoLibre && i < OpcionesPuerto.Length - 1);
             }
             return OpcionesPuerto[i];
         }
@@ -53,7 +53,7 @@ namespace Ejercicio2_Servidor
                 {
                     s.Bind(ie);
                     Console.WriteLine($"Servidor iniciado. " +
-    $"Escuchando en {ie.Address}:{ie.Port}");
+                                      $"Escuchando en {ie.Address}:{ie.Port}");
                     s.Listen(1);
                     while (ServerRunning)
                     {
@@ -71,11 +71,15 @@ namespace Ejercicio2_Servidor
 
         public void notificarUsuarios(List<Cliente> clientes, string mensaje, StreamWriter sw)
         {
-            foreach (Cliente cliente in clientes)
+            lock (l)
             {
-                if (cliente.sw != sw)
+
+                foreach (Cliente cliente in clientes)
                 {
-                    cliente.sw.WriteLine(mensaje);
+                    if (cliente.sw != sw)
+                    {
+                        cliente.sw.WriteLine(mensaje);
+                    }
                 }
             }
         }
@@ -102,10 +106,10 @@ namespace Ejercicio2_Servidor
                     sw.WriteLine(welcome);
                     string? msg = "";
                     string? nombre = "";
-                    sw.WriteLine("Introduzca su nombre de usuario");
                     try
                     {
-                        nombre = sr.ReadLine().Trim();
+                        sw.WriteLine("Introduzca su nombre de usuario");
+                        nombre = sr.ReadLine() == null ? " " : sr.ReadLine();
                         Cliente nuevoCliente = new Cliente(ieClient.Address, nombre, sw);
                         lock (l)
                         {
@@ -123,16 +127,18 @@ namespace Ejercicio2_Servidor
                                     break;
 
                                 case "list":
-                                    foreach (Cliente cliente in clientes)
+                                    lock (l)
                                     {
-                                        if (cliente.sw != sw)
+
+                                        foreach (Cliente cliente in clientes)
                                         {
-                                            nuevoCliente.sw.WriteLine(cliente.ToString());
+                                            if (cliente.sw != sw)
+                                            {
+                                                nuevoCliente.sw.WriteLine(cliente.ToString());
+                                            }
                                         }
                                     }
-
                                     break;
-
                                 default:
                                     if (msg != null)
                                     {
@@ -150,13 +156,13 @@ namespace Ejercicio2_Servidor
                     {
                         sw.WriteLine("Error inesperado, contacte con soporte");
                     }
-                    for (int i = 0; i < clientes.Count; i++)
+                    lock (l)
                     {
-                        if (clientes[i].sw == sw)
+                        for (int i = 0; i < clientes.Count; i++)
                         {
-                            clienteEliminado = clientes[i];
-                            lock (l)
+                            if (clientes[i].sw == sw)
                             {
+                                clienteEliminado = clientes[i];
                                 clientes.RemoveAt(i);
                             }
                         }
