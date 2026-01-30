@@ -14,11 +14,9 @@ namespace Ejercicio2_Servidor
     {
         public bool ServerRunning { set; get; } = true;
         public int Port { set; get; } = 0;
-
-        int[] OpcionesPuerto = { 135, 135, 31416 };
         public int GestionarPuerto()
         {
-            int i = 0;
+            int i = 1;
             bool PuertoLibre = false;
             using (s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
@@ -26,7 +24,7 @@ namespace Ejercicio2_Servidor
                 {
                     try
                     {
-                        IPEndPoint ie = new IPEndPoint(IPAddress.Any, OpcionesPuerto[i]);
+                        IPEndPoint ie = new IPEndPoint(IPAddress.Any, i);
                         s.Bind(ie);
                         //                Console.WriteLine($"Servidor iniciado. " +
                         //$"Escuchando en {ie.Address}:{ie.Port}");
@@ -35,12 +33,12 @@ namespace Ejercicio2_Servidor
                     }
                     catch (SocketException e) when (e.ErrorCode == (int)SocketError.AddressAlreadyInUse)
                     {
-                        Console.WriteLine($"Puerto {OpcionesPuerto[i]} en uso");
+                        Console.WriteLine($"Puerto {i} en uso");
                         i++;
                     }
-                } while (!PuertoLibre && i < OpcionesPuerto.Length - 1);
+                } while (!PuertoLibre );
             }
-            return OpcionesPuerto[i];
+            return i;
         }
         public void InitServer()
         {
@@ -109,7 +107,7 @@ namespace Ejercicio2_Servidor
                     try
                     {
                         sw.WriteLine("Introduzca su nombre de usuario");
-                        nombre = sr.ReadLine() == null ? " " : sr.ReadLine();
+                        nombre = sr.ReadLine();
                         Cliente nuevoCliente = new Cliente(ieClient.Address, nombre, sw);
                         lock (l)
                         {
@@ -150,11 +148,7 @@ namespace Ejercicio2_Servidor
                     }
                     catch (Exception ex) when (ex is ArgumentNullException || ex is IOException)
                     {
-                        sw.WriteLine("Desconectandose del servidor");
-                    }
-                    catch (Exception ex)
-                    {
-                        sw.WriteLine("Error inesperado, contacte con soporte");
+                        msg = null;
                     }
                     lock (l)
                     {
@@ -168,7 +162,6 @@ namespace Ejercicio2_Servidor
                         }
                     }
                     notificarUsuarios(clientes, clienteEliminado.ToString() + " ha abandonado el servidor", sw);
-                    sw.WriteLine("Desconectado del servidor");
                 }
             }
         }
