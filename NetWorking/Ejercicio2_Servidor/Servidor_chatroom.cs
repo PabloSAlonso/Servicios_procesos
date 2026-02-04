@@ -13,10 +13,10 @@ namespace Ejercicio2_Servidor
     internal class Servidor_chatroom//Cierre abrupto al inicio. Todos los puertos ocupados. Locks.
     {
         public bool ServerRunning { set; get; } = true;
-        public int Port { set; get; } = 0;
+        public int Port { set; get; } = 49664;
         public int GestionarPuerto()
         {
-            int i = 1;
+            int i = 49664;
             bool PuertoLibre = false;
             using (s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
@@ -36,6 +36,7 @@ namespace Ejercicio2_Servidor
                         Console.WriteLine($"Puerto {i} en uso");
                         i++;
                     }
+                    Console.WriteLine(i);
                 } while (!PuertoLibre );
             }
             return i;
@@ -43,6 +44,7 @@ namespace Ejercicio2_Servidor
         public void InitServer()
         {
             Port = GestionarPuerto();
+            Console.WriteLine(Port);
             IPEndPoint ie = new IPEndPoint(IPAddress.Any, Port);
             Console.WriteLine("Esperando conexiones... (Ctrl+C para salir)");
             using (s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
