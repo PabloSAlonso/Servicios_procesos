@@ -12,6 +12,9 @@ namespace Ejercicio2_Servidor
     {
         public string[] users;
         public List<string> waitQueue;
+        public int Port = 31416;
+        public bool ServicioEjecutandose { set; get; } = true;
+        private Socket s;
 
         public void ReadNames(String ruta)
         {
@@ -32,48 +35,73 @@ namespace Ejercicio2_Servidor
 
         public int ReadPin(String ruta)
         {
+            String pin = "";
             try
             {
-                StreamReader sr = new StreamReader(ruta);
-                return int.Parse(sr.ReadLine());
+                using (StreamReader sr = new StreamReader(ruta))
+                {
+                    string contenido = sr.ReadToEnd().Trim();
+                    for (int i = 0; i < 4; i++)
+                    {
+                        pin += contenido[i];
+                    }
+                }
             }
             catch (Exception e) when (e is IOException || e is ArgumentNullException)
             {
-
                 Console.WriteLine("Error de archivos o Pin");
                 return -1;
             }
+            return int.Parse(pin) | -1;
         }
 
-        public bool ServicioEjecutandose { set; get; } = true;
-        public int Port { set; get; } = 31416;
-        private Socket s;
-        public int GestionarPuerto()
+        public int GestionarPuerto(int puertoInicial)
         {
-            int i = 1024;
-            bool PuertoLibre = false;
+            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, puertoInicial);
             using (s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
+                bool libre = false;
                 do
                 {
                     try
                     {
-                        //s.Bind(IPEndPoint );
+                        s.Bind(iPEndPoint);
                         s.Listen(1);
+                        libre = true;
                     }
                     catch (SocketException se) when (se.ErrorCode == (int)SocketError.AddressAlreadyInUse)
                     {
-                        Console.WriteLine($"Puerto {i} ocupado");
-                        i++;
+                        Console.WriteLine($"Puerto {puertoInicial} ocupado");
+                        puertoInicial++;
                     }
-                } while (!PuertoLibre);
+                } 
+                while (libre && puertoInicial < IPEndPoint.MaxPort);
+                return puertoInicial;
             }
-            return i;
+        }
+
+        public bool PuertoLibre(int puerto)
+        {
+            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, puerto);
+            using (Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                try
+                {
+                    s.Bind(iPEndPoint);
+                    s.Listen(1);
+                }
+                catch (SocketException)
+                {
+                    return false;
+                }
+                return true;
+            }
         }
 
         public void InitServer()
         {
             IPEndPoint ie = new IPEndPoint(IPAddress.Any, Port);
+
         }
 
         public void ProtocoloCliente(Socket sClient)
