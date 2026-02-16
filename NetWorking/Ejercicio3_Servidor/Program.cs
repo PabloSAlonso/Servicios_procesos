@@ -1,10 +1,13 @@
-﻿namespace Ejercicio3_Servidor
+﻿using Ejercicio2_Servidor;
+
+namespace Ejercicio3_Servidor
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            ShiftServer s = new ShiftServer();
+            s.InitServer();
         }
     }
 }
