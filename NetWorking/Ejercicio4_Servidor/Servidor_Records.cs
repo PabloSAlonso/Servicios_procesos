@@ -15,6 +15,9 @@ namespace Ejercicio4_Servidor
         Socket socketServer;
         string rutaPalabras = $"{Environment.GetEnvironmentVariable("programdata")}\\palabras.txt";
         string rutaRecords = $"{Environment.GetEnvironmentVariable("programdata")}\\records.dat";
+        List<string> words;
+        List<Record> records;
+        private readonly object l = new object();
 
         public bool PuertoLibre(int puerto)
         {
@@ -96,8 +99,6 @@ namespace Ejercicio4_Servidor
                 {
                     sw.AutoFlush = true;
                     sw.WriteLine("Bienvenido al servidor de Ahorcado");
-                    sw.WriteLine("Introduce nombre para guardar tus records");
-                    string nombre = sr.ReadLine();
                     sw.WriteLine("Comandos disponibles: ( gw | sw 'palabra' | gr | sr 'record' | close 'clave' )");
                     string comando = sr.ReadLine();
                     string[] comandoEntero = new string[2];
@@ -108,20 +109,65 @@ namespace Ejercicio4_Servidor
                     switch (comandoEntero[0])
                     {
                         case "gw":
-
+                            lock (l)
+                            {
+                                sw.WriteLine(words[NumeroAleatorio(words.Count)]);
+                            }
                             break;
-
                         case "sw":
-
+                            if (comandoEntero.Length == 2)
+                            {
+                                lock (l)
+                                {
+                                    if (GuardaEnArchivo(comandoEntero[1], rutaPalabras))
+                                    {
+                                        words.Add(comandoEntero[1]);
+                                        sw.WriteLine("OK");
+                                    }
+                                    else
+                                    {
+                                        sw.WriteLine("ERROR");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                sw.WriteLine("ERROR");
+                            }
                             break;
                         case "gr":
-
+                            lock (l)
+                            {
+                                records = LeerArchivoBinario(rutaRecords);
+                                foreach (Record record in records)
+                                {
+                                    sw.WriteLine($"{record.Nombre} - {record.Segundos}");
+                                }
+                            }
                             break;
                         case "sr":
-
+                            if (comandoEntero.Length == 2)
+                            { // TDO trycatch
+                                sw.WriteLine("Introduce nombre: ");
+                                string nombre = sr.ReadLine();
+                                sw.WriteLine("Introduce el tiempo: ");
+                                int tiempo = int.Parse(sr.ReadLine());
+                                Record record = new Record(nombre, tiempo);
+                                if (EscribirRecord(record, rutaRecords))
+                                {
+                                    sw.WriteLine("ACCEPT");
+                                }
+                                else
+                                {
+                                    sw.WriteLine("REJECT");
+                                }
+                            }
                             break;
                         case "close":
-
+                            if (comandoEntero.Length == 2)
+                            {
+                                StopServer();
+                            }
                             break;
                     }
                 }
@@ -142,6 +188,80 @@ namespace Ejercicio4_Servidor
             }
         }
 
-        public List<Record>
+        public static List<Record> LeerArchivoBinario(string ruta)
+        {
+            List<Record> records = new List<Record>();
+            try
+            {
+                using (FileStream fs = new FileStream(ruta, FileMode.Open))
+                using (BinaryReader br = new BinaryReader(fs))
+                {
+                    while (br.BaseStream.Position < br.BaseStream.Length)
+                    {
+                        string nombre = br.ReadString();
+                        int cantidadSegundos = br.ReadInt32();
+                        records.Add(new Record(nombre, cantidadSegundos));
+                    }
+                }
+            }
+            catch (IOException) { }
+            return records;
+        }
+
+
+        public List<Record> AñadirRecord(List<Record> records, Record recordComparar)
+        {
+            for (int i = 0; i < records.Count; i++)
+            {
+                if (records[i].Segundos > recordComparar.Segundos)
+                {
+                    records[i] = recordComparar;
+                }
+            }
+            return records;
+        }
+
+        public bool EscribirRecord(Record record, string ruta)
+        {
+            try
+            {
+                using (FileStream fs = new FileStream(ruta, FileMode.OpenOrCreate))
+                using (BinaryWriter bw = new BinaryWriter(fs))
+                {
+                    AñadirRecord(records, record);
+                    foreach (Record recorda in records)
+                    {
+                        bw.Write($"{recorda.Nombre} {recorda.Segundos}");
+                    }
+                }
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        static Random random = new Random();
+        public static int NumeroAleatorio(int max)
+        {
+            return random.Next(max);
+        }
+
+        public bool GuardaEnArchivo(string word, string pathFile)
+        {
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(pathFile, true))
+                {
+                    sw.Write($",{word}");
+                }
+            }
+            catch (IOException e)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }
