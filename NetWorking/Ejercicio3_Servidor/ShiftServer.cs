@@ -111,7 +111,6 @@ namespace Ejercicio2_Servidor
                 socketServidor.Bind(iPEndPoint);
                 socketServidor.Listen(100);
                 Console.WriteLine($"Usuario conectado");
-                Console.WriteLine($"{Environment.GetEnvironmentVariable("userprofile")}\\usuarios.txt");
                 while (serverIsRunning)
                 {
                     try
