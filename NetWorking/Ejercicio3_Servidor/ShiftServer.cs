@@ -98,7 +98,7 @@ namespace Ejercicio2_Servidor
         }
 
 
-        public void Init()
+        public void InitServer()
         {
             if (!PuertoLibre(port))
             {
@@ -117,7 +117,7 @@ namespace Ejercicio2_Servidor
                     try
                     {
                         Socket client = socketServidor.Accept();
-                        Thread thread = new Thread(() => RequestManager(client));
+                        Thread thread = new Thread(() => ClientDispatcher(client));
                         thread.Start();
                     }
                     catch (SocketException) { }
@@ -132,7 +132,7 @@ namespace Ejercicio2_Servidor
             socketServidor.Close();
         }
 
-        public void RequestManager(Socket socketCliente)
+        public void ClientDispatcher(Socket socketCliente)
         {
             using (socketCliente)
             {
