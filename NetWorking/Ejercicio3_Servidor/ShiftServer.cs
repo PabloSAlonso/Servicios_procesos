@@ -10,84 +10,60 @@ namespace Ejercicio2_Servidor
 {
     internal class ShiftServer
     {
-        public string[] users;
-        public List<string> waitQueue;
-        public int Port = 31416;
-        private Socket socketServer;
+        string[] users = ReadNames($"{Environment.GetEnvironmentVariable("userprofile")}\\usuarios.txt");
+        List<string> waitQueue = cargarLista($"{Environment.GetEnvironmentVariable("userprofile")}\\waitQueue.txt");
+        private readonly object l = new object();
+        int port = 31416;
+        Socket socketServidor;
+        bool serverIsRunning = true;
 
-        bool servidorEjecutandose = true;
-
-        public void ReadNames(String ruta)
+        public static string[] ReadNames(string path)
         {
             try
             {
-                using (StreamReader sr = new StreamReader(ruta))
+                using (StreamReader sr = new StreamReader(path))
                 {
-                    users = sr.ReadToEnd().Split(";");
+                    return sr.ReadToEnd().Split(";");
                 }
             }
-            catch (IOException io)
+            catch (IOException)
             {
-                Console.WriteLine("Error de archivo");
+                Console.WriteLine("Error en el archivo");
+                return new string[0];
             }
         }
 
-        public int ReadPin(String ruta)
+        public int ReadPin(string path)
         {
-            String pin = "";
+            string pin = "";
             try
             {
-                using (StreamReader sr = new StreamReader(ruta))
+                using (StreamReader sr = new StreamReader(path))
                 {
-                    string contenido = sr.ReadToEnd().Trim();
+                    string content = sr.ReadToEnd().Trim();
                     for (int i = 0; i < 4; i++)
                     {
-                        pin += contenido[i];
+                        pin += content[i];
                     }
                 }
             }
-            catch (Exception e) when (e is IOException || e is ArgumentNullException)
+            catch (IOException)
             {
-                Console.WriteLine("Error de archivos o Pin");
+                Console.WriteLine("Error con el archivo");
                 return -1;
             }
-            return int.Parse(pin);
+            return int.Parse(pin); // FIXME
         }
 
-        public int GestionarPuerto(int puertoInicial)
+        public bool PuertoLibre(int port)
         {
-            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, puertoInicial);
-            using (socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
-            {
-                bool libre = false;
-                do
-                {
-                    try
-                    {
-                        socketServer.Bind(iPEndPoint);
-                        socketServer.Listen(1);
-                        libre = true;
-                    }
-                    catch (SocketException se) when (se.ErrorCode == (int)SocketError.AddressAlreadyInUse)
-                    {
-                        Console.WriteLine($"Puerto {puertoInicial} ocupado");
-                        puertoInicial++;
-                    }
-                }
-                while (libre && puertoInicial < IPEndPoint.MaxPort);
-                return puertoInicial;
-            }
-        }
-
-        public bool PuertoLibre(int puerto)
-        {
-            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, puerto);
-            using (Socket s = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, port);
+            using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
             {
                 try
                 {
-                    s.Bind(iPEndPoint);
-                    s.Listen(1);
+                    socket.Bind(iPEndPoint);
+                    socket.Listen(1);
                 }
                 catch (SocketException)
                 {
@@ -97,177 +73,272 @@ namespace Ejercicio2_Servidor
             }
         }
 
-        public void InitServer()
+        public int GestionarPuerto(int initialPort)
         {
-            if (!PuertoLibre(Port))
-            {
-                GestionarPuerto(Port);
-            }
-            Console.WriteLine($"Puerto:{Port}");
-            IPEndPoint ie = new IPEndPoint(IPAddress.Any, Port);
-            using (socketServer = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            IPEndPoint iP = new IPEndPoint(IPAddress.Any, initialPort);
+            bool isFree = false;
+            do
             {
                 try
                 {
-
-                    socketServer.Bind(ie);
-                    Console.WriteLine($"Servidor iniciado. " +
-                                      $"Escuchando en {ie.Address}:{ie.Port}");
-                    socketServer.Listen(1);
-                    while (servidorEjecutandose)
+                    using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
                     {
-                        Socket cliente = socketServer.Accept();
-                        Thread hiloCliente = new Thread(() => ProtocoloCliente(cliente));
-                        hiloCliente.Start();
+                        socket.Bind(iP);
+                        socket.Listen(1);
+                        isFree = true;
                     }
                 }
                 catch (SocketException)
                 {
-                    Console.WriteLine("Fin de servidor");
+                    initialPort++;
+                }
+                return initialPort;
+            }
+            while (!isFree && initialPort < IPEndPoint.MaxPort); // Comprobar lógica del bucle
+        }
+
+
+        public void Init()
+        {
+            if (!PuertoLibre(port))
+            {
+                port = GestionarPuerto(1024);
+            }
+            Console.WriteLine("Puerto: " + port);
+            IPEndPoint iPEndPoint = new IPEndPoint(IPAddress.Any, port);
+            using (socketServidor = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+            {
+                socketServidor.Bind(iPEndPoint);
+                socketServidor.Listen(100);
+                Console.WriteLine($"Usuario conectado");
+                Console.WriteLine($"{Environment.GetEnvironmentVariable("userprofile")}\\usuarios.txt");
+                while (serverIsRunning)
+                {
+                    try
+                    {
+                        Socket client = socketServidor.Accept();
+                        Thread thread = new Thread(() => RequestManager(client));
+                        thread.Start();
+                    }
+                    catch (SocketException) { }
                 }
             }
-            ReadNames($"{Environment.GetEnvironmentVariable("userprofile")}\\usuarios.txt");
+
         }
 
-        public void StopServer()
+        public void Stop()
         {
-            servidorEjecutandose = false;
-            socketServer.Close();
+            serverIsRunning = false;
+            socketServidor.Close();
         }
 
-        public void ProtocoloCliente(Socket socketClient)
+        public void RequestManager(Socket socketCliente)
         {
-            using (socketClient)
+            using (socketCliente)
             {
-                IPEndPoint ip = (IPEndPoint)socketClient.RemoteEndPoint;
-                using (NetworkStream network = new NetworkStream(socketClient))
+                IPEndPoint ip = (IPEndPoint)socketCliente.RemoteEndPoint;
+                using (NetworkStream network = new NetworkStream(socketCliente))
                 using (StreamReader sr = new StreamReader(network, Console.OutputEncoding))
                 using (StreamWriter sw = new StreamWriter(network, Console.OutputEncoding))
                 {
                     sw.AutoFlush = true;
-                    sw.WriteLine("Bienvenido");
-                    sw.WriteLine("Introduce tu nombre");
+                    sw.WriteLine("Bienvenido al servidor por turnos");
+                    sw.Write("Introduzca su nombre:");
                     try
                     {
-                        string nombreUsuario = sr.ReadLine();
-                        if (usuarioEnLista(users, nombreUsuario) || nombreUsuario == "admin")
+                        string userName = sr.ReadLine();
+                        if (usuarioEnLista(users, userName) || userName == "admin")
                         {
-                            if (nombreUsuario == "admin")
+                            if (userName == "admin")
                             {
-                                sw.Write("Introduce un PIN:");
-                                int pin = int.Parse(sr.ReadLine());
-                                int pinArchivo = 0;
-                                try
-                                {
-                                    pinArchivo = ReadPin($"{Environment.GetEnvironmentVariable("userprofile")}\\pin.txt");
-                                }
-                                catch (ArgumentException)
-                                {
-                                    pinArchivo = 1234;
-                                }
-                                if (pin == pinArchivo)
-                                {
-                                    string comando = "";
-                                    string[] comandoCompleto;
-                                    do
-                                    {
-                                        sw.WriteLine("Introduce un comando (del pos | chpin pin | exit | shutdown):");
-                                        comando = sr.ReadLine();
-                                        if (comando != null)
-                                        {
-                                            comandoCompleto = comando.Split(' ');
-                                            switch (comandoCompleto[0])
-                                            {
-                                                case "del":
-                                                    break;
-                                                case "chpin":
-                                                    break;
-                                                case "exit":
-
-
-                                                    break;
-
-                                                case "shutdown":
-
-                                                    break;
-                                                default:
-                                                    sw.WriteLine("Comandos válidos: (del pos | chpin pin | exit | shutdown)");
-                                                    break;
-                                            }
-                                        }
-                                    } while (comando != "list" && comando != "add");
-                                    socketClient.Close();
-                                }
-                                else
-                                {
-                                    sw.WriteLine("PIN incorrecto");
-                                    sr.ReadLine();
-                                    socketClient.Close();
-                                }
+                                MenuAdmin(sr, sw, socketCliente);
                             }
                             else
                             {
-                                string comando = "";
-                                do
-                                {
-                                    sw.WriteLine("Introduce un comando (list | add):");
-                                    comando = sr.ReadLine();
-                                    if (comando != null)
-                                    {
-
-                                        switch (comando)
-                                        {
-                                            case "list":
-                                                foreach (string user in waitQueue)
-                                                {
-                                                    sw.WriteLine($"{user}");
-                                                }
-
-                                                break;
-
-                                            case "add":
-                                                if (!usuarioEnLista(waitQueue.ToArray(), nombreUsuario))
-                                                {
-                                                    waitQueue.Add($"{nombreUsuario}-{DateTime.Now.ToString("yyyy-MM-dd  HH/mm/ss")}");
-                                                    sw.WriteLine("OK");
-                                                }
-                                                else
-                                                {
-                                                    sw.WriteLine("Este usuario esta ya en la cola");
-                                                }
-                                                break;
-                                            default:
-                                                sw.WriteLine("Comandos válidos: list | add");
-                                                break;
-                                        }
-                                    }
-                                } while (comando != "list" && comando != "add");
-                                socketClient.Close();
+                                MenuUserNormal(sr, sw, userName);
                             }
                         }
                         else
                         {
-                            socketClient.Close();
+                            sw.WriteLine("Usuario Desconectado");
+                            socketCliente.Close();
                         }
                     }
-                    catch (IOException e)
-                    {
-
-                    }
+                    catch (IOException e) { }
                 }
-
             }
         }
-        public bool usuarioEnLista(string[] nombres, string nombreBuscar)
+
+        public bool usuarioEnLista(string[] names, string nameToSearch)
         {
-            foreach (String nombre in nombres)
+            foreach (string name in names)
             {
-                if (nombre == nombreBuscar)
+                if (name == nameToSearch)
                 {
                     return true;
                 }
             }
             return false;
         }
+
+        public static List<string> cargarLista(string path)
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader(path))
+                {
+                    string[] list = sr.ReadToEnd().Split(Environment.NewLine);
+                    return list.ToList();
+                }
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine("No se pudo cargar archiovos");
+                return new List<string>();
+            }
+        }
+
+        private void MenuAdmin(StreamReader sr, StreamWriter sw, Socket socketClient)
+        {
+            sw.Write("Introduce un pin: ");
+            bool pinChecked = pinChecked = int.TryParse(sr.ReadLine(), out int pin);
+            int correctPin = ReadPin($"{Environment.GetEnvironmentVariable("userprofile")}\\pin.txt");
+            string command;
+            bool adminIsConnected = true;
+            if (pinChecked && correctPin == pin)
+            {
+                do
+                {
+                    sw.Write("Introduce un comando (list | add | del X | chpin X | shutdown | exit): ");
+                    command = sr.ReadLine();
+
+                    string[] comandoDoble = command.Split(" ");
+
+                    switch (comandoDoble[0])
+                    {
+                        case "list":
+                            lock (l)
+                            {
+                                for (int i = 0; i < waitQueue.Count; i++)
+                                {
+                                    sw.WriteLine($"{waitQueue[i]}");
+                                }
+                            }
+                            break;
+                        case "add":
+                            lock (l)
+                            {
+                                waitQueue.Add($"admin - {DateTime.Now:dd/MM/yyyy - HH:mm:ss}");
+                                sw.WriteLine("OK");
+                            }
+                            break;
+                        case "del":
+                            if (comandoDoble.Length > 1 && int.TryParse(comandoDoble[1], out int index))
+                            {
+                                lock (l)
+                                {
+                                    if (index >= 0 && index < waitQueue.Count)
+                                    {
+                                        waitQueue.RemoveAt(index);
+                                        sw.WriteLine("Usuario eliminado");
+                                    }
+                                    else
+                                    {
+                                        sw.WriteLine("indice no válido");
+                                    }
+                                }
+                            }
+                            break;
+
+                        case "chpin":
+                            if (comandoDoble.Length > 1 && int.TryParse(comandoDoble[1], out int newPin))
+                            {
+                                using (StreamWriter sw2 = new StreamWriter($"{Environment.GetEnvironmentVariable("userprofile")}\\pin.txt"))
+                                {
+                                    sw2.WriteLine(newPin);
+                                }
+
+                                sw.WriteLine("Pin cambiado");
+                            }
+                            break;
+
+                        case "shutdown":
+                            lock (l)
+                            {
+                                using (StreamWriter sw3 = new StreamWriter($"{Environment.GetEnvironmentVariable("userprofile")}\\waitQueue.txt"))
+                                {
+                                    foreach (var item in waitQueue)
+                                    {
+                                        sw3.WriteLine(item);
+                                    }
+                                }
+                            }
+
+                            Stop();
+                            adminIsConnected = false;
+                            break;
+
+                        case "exit":
+                            sw.WriteLine("Desconectando...");
+                            adminIsConnected = false;
+                            break;
+
+                        default:
+                            sw.WriteLine("Comando no válido");
+                            break;
+                    }
+
+                } while (adminIsConnected);
+            }
+            else
+            {
+                sw.WriteLine("Pin Incorrecto");
+            }
+        }
+
+        private void MenuUserNormal(StreamReader sr, StreamWriter sw, string userName)
+        {
+            string command;
+
+            do
+            {
+                sw.Write("Introduce un comando (list | add): ");
+                command = sr.ReadLine();
+
+                switch (command)
+                {
+                    case "list":
+                        lock (l)
+                        {
+                            foreach (string user in waitQueue)
+                            {
+                                sw.WriteLine(user);
+                            }
+                        }
+                        break;
+
+                    case "add":
+                        lock (l)
+                        {
+                            if (!usuarioEnLista(waitQueue.ToArray(), userName))
+                            {
+                                waitQueue.Add($"{userName} - {DateTime.Now.ToString("dd/MM/yyyy - HH:mm:ss")}");
+                                sw.WriteLine("OK");
+                            }
+                            else
+                            {
+                                sw.WriteLine("Este user ya exite");
+                            }
+                        }
+                        break;
+                    default:
+                        sw.WriteLine("Comando no válido");
+                        break;
+                }
+
+            } while (command != "list" && command != "add");
+        }
+
+
     }
 }
