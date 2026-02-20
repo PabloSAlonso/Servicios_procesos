@@ -52,7 +52,7 @@ namespace Ejercicio2_Servidor
                 Console.WriteLine("Error con el archivo");
                 return -1;
             }
-            return int.Parse(pin); // FIXME
+            return int.Parse(pin); 
         }
 
         public bool PuertoLibre(int port)
@@ -94,7 +94,7 @@ namespace Ejercicio2_Servidor
                 }
                 return initialPort;
             }
-            while (!isFree && initialPort < IPEndPoint.MaxPort); // Comprobar lógica del bucle
+            while (!isFree && initialPort < IPEndPoint.MaxPort); 
         }
 
 
