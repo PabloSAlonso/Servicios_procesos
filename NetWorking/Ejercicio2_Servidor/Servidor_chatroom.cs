@@ -36,8 +36,7 @@ namespace Ejercicio2_Servidor
                         Console.WriteLine($"Puerto {i} en uso");
                         i++;
                     }
-                    Console.WriteLine(i);
-                } while (!PuertoLibre );
+                } while (!PuertoLibre);
             }
             return i;
         }
